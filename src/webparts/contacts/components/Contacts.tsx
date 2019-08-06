@@ -1,183 +1,110 @@
 import * as React from 'react';
 import styles from './Contacts.module.scss';
-import { IContactsProps } from './IContactsProps';
-import { escape } from '@microsoft/sp-lodash-subset';
-import {getMockContacts} from './MockContacts';
+import { IContactsState } from './IContactsState';
+import { getMockContacts } from './MockContacts';
+import ContactService from '../../contacts/services/ContactService';
 import { SPHttpClientResponse, SPHttpClient } from '@microsoft/sp-http';
 
-export default class Contacts extends React.Component< {} , IContactsProps> {
-  selectedList:any;
-  edit:any=null;
-  add:any=null;
-  public constructor(props)
-  {
+import EditForm from './EditForm/EditForm';
+import AddForm from './AddForm/AddForm';
+import Detail from './Detail/Detail';
+import Header from './Header/Header';
+import ContactsList from './ContactsList/ContactsList';
+
+
+export default class Contacts extends React.Component<{}, IContactsState> {
+  selectedList: any;
+  service:ContactService;
+  public constructor(props) {
     super(props);
 
-   this.state= {contactList:getMockContacts(),activeContact:getMockContacts()[0],tempName:'',tempNum:'1',tempDepartment:'IT',editForm:false,addForm:false};
-   console.log(this.state.activeContact);
-   this.selectedList=this.state.contactList;
+    this.service=new ContactService();
+
+    this.state = {
+      contactList: this.service.getContacts(),
+      activeContact: this.service.getContacts()[0],
+      edit: false, 
+      add: false
+    };
+    this.selectedList = this.state.contactList;
+
+    this.setActiveContact=this.setActiveContact.bind(this);
+    this.activateAddForm=this.activateAddForm.bind(this);
+    this.deactivateAddForm=this.deactivateAddForm.bind(this);
+    this.activateEditForm=this.activateEditForm.bind(this);
+    this.deactivateEditForm=this.deactivateEditForm.bind(this);
+    this.addContact=this.addContact.bind(this);
+    this.setSelectedList=this.setSelectedList.bind(this);
+
   }
 
+  public setSelectedList(contactList){
+    this.selectedList=contactList;
+    this.forceUpdate();
+  }
   
-  public render(): React.ReactElement<IContactsProps> {
-    if(this.state.editForm){
-      this.edit=    <div>
-      <h3>Edit selected contact:</h3>
-      name:<input type="text" onChange={
-                                        (e)=> 
-                                        {
-                                        this.state.activeContact.name=e.target.value;
-                                        this.forceUpdate();
-                                        }
-                                        } >
+  public setActiveContact(contact){
+    this.setState({activeContact:contact});
+  }
 
-                                        </input>
-      number:<input type="text" onChange={ (e)=> 
-                                        {
-                                        this.state.activeContact.num=e.target.value;
-                                        this.forceUpdate();
+  public activateAddForm()
+  {
+    this.setState({add:true});
+    this.forceUpdate();
+  }
 
-                                        }
-                                        }></input>
-      
-      <select onChange={(e)=>{this.state.activeContact.department=e.target.value;this.forceUpdate()}}>
-          <option value="IT">IT</option>
-          <option value="Sales">Sales</option>
-      </select>
-        <button onClick={(e)=>
-          {
-            this.setState({editForm:false});
-          }}
-          >Done</button>
-      </div>
-    }
-    else{
-      this.edit=null;
-    }
+  public deactivateAddForm()
+  {
+    this.setState({add:false});
+    this.forceUpdate();
+  }
 
+  public activateEditForm()
+  {
+    this.setState({edit:true});
+    this.forceUpdate();
+  }
 
-    if(this.state.addForm){
-      this.add=   <div>
-      <h3>Addcontact:</h3>
-     name:<input type="text" onChange={ (e)=>this.setState({tempName:e.target.value}) } ></input>
-      number:<input type="text"  onChange={ (e)=>this.setState({tempNum:e.target.value}) }></input>
-      department: 
-     <select onChange={(e)=>this.setState({tempDepartment:e.target.value})}>
-         <option value="IT">IT</option>
-         <option value="Sales">Sales</option>
-     </select>
-      <button onClick={ (e)=>{
-                        this.state.contactList.push( {name:this.state.tempName,num:this.state.tempNum,department:this.state.tempDepartment} );  
-                        this.setState({addForm:false})
-                        this.forceUpdate() } }> Done</button>
+  public deactivateEditForm()
+  {
+    this.setState({edit:false});
+    this.forceUpdate();
+  }
 
-      </div>
-     
-    }
-    else{
-      this.add=null;
-    }
+  public addContact(name,num,department){
+    this.service.addContact(name,num,department);
+    this.setState({ add: false }) 
+  }
+  
+  public deleteContact(activeContact){
+    this.service.deleteContact(activeContact);
+    this.setState({ activeContact: this.state.contactList[0] });
+    this.forceUpdate();
 
+  }
 
-    return (
+  public render(): React.ReactElement<IContactsState> {
+
+      return (
       <div className={styles.contact}>
 
+        <Header setSelectedList={this.setSelectedList} contactList={this.state.contactList} activateAddForm={this.activateAddForm} deactivateAddForm={this.deactivateAddForm} activateEditForm={this.activateEditForm} deactivateEditForm={this.deactivateEditForm}/>
+        <ContactsList activeContact={this.state.activeContact} setActiveContact={this.setActiveContact} selectedList={this.selectedList}/>
 
-
-
-<div className={styles["header-container"]}>
-  <div className={styles.header}>
-      <p className={styles.title}>Address Book</p>
-  </div>
-
-<div className={styles.menu}>  
-  <nav className={styles["menu-nav"]}>
-    <ul className={styles["menu-items"]}>
-      <li className={styles["menu-item"]} onClick={(e)=>this.setState({addForm:true,editForm:false})} >+add </li>
-      <li className={styles["menu-item"]}>
-      <select  
-      onChange={ (e)=>{
-        this.selectedList=[];
-      
-        if(e.target.value=="All")
-        {
-          this.selectedList=this.state.contactList;
-     
-        }
-        else
-        {
-          
-          this.state.contactList.map( (contact,i)=>{ 
-            if(contact.department==e.target.value)
-            {
-              this.selectedList.push(contact);
-            } 
-          } );
-        }
-        this.forceUpdate();
-      } } 
-      >
-          <option value="All">All</option>
-          <option value="IT">IT</option>
-          <option value="Sales">Sales</option>
-        </select> </li>
-      
-    </ul>
-	
-  </nav>
-  </div>
-  
-</div>
-
-
-
-
-     
-        <div className={styles["contacts-container"]}>
-          <h3 className={styles["contacts-header"]}>CONTACTS</h3>
-          <ul className={styles["contacts-list"]}>
-          {this.selectedList.map( (contact,i) => <li onClick={ (e)=>{this.setState( { activeContact:contact } );this.forceUpdate()} }   > <h1 className={styles["list-contact-name"]}>{contact.name}</h1> </li> )}
-
-          </ul>
-        
-        </div>
-        
         <div className={styles["active-contact-details"]}>
-        
-        <h1 className={styles["detail-name"]}>{this.state.activeContact.name}</h1>
-        <h1 className={styles["detail-value"]}>{this.state.activeContact.num}</h1>
-        <h1 className={styles["detail-value"]}>{this.state.activeContact.department}</h1>
-
-        <div className={styles["edit-options"]}>
-        <button className={styles.edit} onClick={(e)=>this.setState({editForm:true,addForm:false})}>EDIT</button>
-        <button onClick={ (e)=> {
-          
-          this.state.contactList.splice(this.state.contactList.indexOf(this.state.activeContact),1);
-          
-            this.setState({activeContact:this.state.contactList[0]});
- 
-          
-          this.forceUpdate();
-         } }    >Delete Contact</button>
-         </div>
-
+          <Detail activeContact={this.state.activeContact}/>
+            <div className={styles["edit-options"]}>
+                  <button className={styles.edit} onClick={(e) => this.setState({ edit: true, add: false })}>EDIT</button>
+                  <button onClick={(e)=>this.deleteContact(this.state.activeContact)}   >Delete Contact</button>
+            </div>
         </div>
-        
-        {this.edit}
 
-         {this.add}
-
+        <EditForm edit={this.state.edit } activeContact={this.state.activeContact} setActCon={this.setActiveContact} deactivateEditForm={this.deactivateEditForm}/>
         
+        <AddForm add={this.state.add} addContact={this.addContact}/>
+
         <br></br>
 
-       
-           
-         
-     
-        
-                                                                               
-        
-      
       </div>
     );
   }

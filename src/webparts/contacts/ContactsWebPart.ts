@@ -9,7 +9,7 @@ import {
 
 import * as strings from 'ContactsWebPartStrings';
 import Contacts from './components/Contacts';
-import { IContactsProps } from './components/IContactsProps';
+import { IContactsState } from './components/IContactsState';
 
 export interface IContactsWebPartProps {
   description: string;
@@ -18,7 +18,7 @@ export interface IContactsWebPartProps {
 export default class ContactsWebPart extends BaseClientSideWebPart<IContactsWebPartProps> {
 
   public render(): void {
-    const element: React.ReactElement<IContactsProps > = React.createElement(
+    const element: React.ReactElement<IContactsState > = React.createElement(
       Contacts,
       {
         description: this.properties.description
