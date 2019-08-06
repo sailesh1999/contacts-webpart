@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "contacts-webpart-client-side-solution",
+    "id": "67e69d01-822e-4053-b311-a6f33d6cb817",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "isDomainIsolated": false
+  },
+  "paths": {
+    "zippedPackage": "solution/contacts-webpart.sppkg"
+  }
+}
