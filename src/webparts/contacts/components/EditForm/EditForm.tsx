@@ -1,6 +1,7 @@
 import * as React from "react";
 import {IEditFormProps} from './IEditFormProps';
 import {IEditFormState} from './IEditFormState';
+import { Department } from "../../departments/departments";
 
 
 export default class EditForm extends React.Component<IEditFormProps,IEditFormState>{
@@ -14,7 +15,7 @@ export default class EditForm extends React.Component<IEditFormProps,IEditFormSt
         if(this.props.edit){
             this.editForm=    <div>
             <h3>Edit selected contact:</h3>
-            name:<input type="text" onChange={
+            name:<input type="text" value={this.props.activeContact.name} onChange={
                                               (e)=> 
                                               {
                                               this.props.activeContact.name=e.target.value;
@@ -23,7 +24,7 @@ export default class EditForm extends React.Component<IEditFormProps,IEditFormSt
                                               } >
       
                                               </input>
-            number:<input type="text" onChange={ (e)=> 
+            number:<input type="text" value={this.props.activeContact.num} onChange={ (e)=> 
                                               {
                                               this.props.activeContact.num=e.target.value;
                                               this.forceUpdate();
@@ -31,10 +32,10 @@ export default class EditForm extends React.Component<IEditFormProps,IEditFormSt
                                               }
                                               }></input>
             
-            <select onChange={(e)=>{this.props.activeContact.department=e.target.value;this.forceUpdate()}}>
+            <select value={this.props.activeContact.department} onChange={(e)=>{this.props.activeContact.department=e.target.value;this.forceUpdate()}}>
                 <option value="NotSpecified">Select</option>
-                <option value="IT">IT</option>
-                <option value="Sales">Sales</option>
+                <option value={Department.IT}>IT</option>
+                <option value={Department.Sales}>Sales</option>
             </select>
               <button onClick={(e)=>
                 {

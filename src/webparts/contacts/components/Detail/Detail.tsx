@@ -1,5 +1,6 @@
 import * as React from "react";
 import styles from '../Contacts.module.scss';
+import { Contact } from "../../../../Models/Contact";
 
 
 interface IDetailState{
@@ -7,7 +8,7 @@ interface IDetailState{
 }
 
 interface IDetailProps{
-    activeContact:any;
+    activeContact:Contact;
 }
 
 export default class Detail extends React.Component<IDetailProps,IDetailState>

@@ -15,8 +15,8 @@ export default class ContactService{
         return this.contactList;
     }
 
-    public addContact(name,num,department){
-        this.contactList.push({ id:0,name: name, num: num, department: department });
+    public addContact(contact){
+        this.contactList.push(contact);
     }
 
     public deleteContact(activeContact){

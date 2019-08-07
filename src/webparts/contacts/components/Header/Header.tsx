@@ -1,9 +1,11 @@
 import * as React from "react";
 import styles from '../Contacts.module.scss';
+import { Contact } from "../../../../Models/Contact";
+import { Department } from "../../departments/departments";
 
 interface IHeaderDetailProps{
     setSelectedList:any;
-    contactList:any;
+    contactList:Contact[];
     activateAddForm:any;
     deactivateAddForm:any;
     activateEditForm:any;
@@ -11,7 +13,7 @@ interface IHeaderDetailProps{
 }
 
 export default class Header extends React.Component<IHeaderDetailProps,{}>{
-    filteredList:any=[];
+    filteredList:Contact[]=[];
 public constructor(props:IHeaderDetailProps){
     super(props);
 }
@@ -53,8 +55,8 @@ public constructor(props:IHeaderDetailProps){
                       }}
                     >
                       <option value="All">All</option>
-                      <option value="IT">IT</option>
-                      <option value="Sales">Sales</option>
+                      <option value={Department.IT}>IT</option>
+                      <option value={Department.Sales}>Sales</option>
                     </select> </li>
   
                 </ul>

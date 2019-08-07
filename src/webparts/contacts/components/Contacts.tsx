@@ -10,13 +10,14 @@ import AddForm from './AddForm/AddForm';
 import Detail from './Detail/Detail';
 import Header from './Header/Header';
 import ContactsList from './ContactsList/ContactsList';
+import { Contact } from '../../../Models/Contact';
 
 
 export default class Contacts extends React.Component<{}, IContactsState> {
-  selectedList: any;
+  selectedList: Contact[];
   service:ContactService;
   public constructor(props) {
-    super(props);
+    super(props); 
 
     this.service=new ContactService();
 
@@ -71,8 +72,8 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     this.forceUpdate();
   }
 
-  public addContact(name,num,department){
-    this.service.addContact(name,num,department);
+  public addContact(contact){
+    this.service.addContact(contact);
     this.setState({ add: false }) 
   }
   
