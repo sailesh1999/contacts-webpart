@@ -18,14 +18,20 @@ export interface IContactsWebPartProps {
 export default class ContactsWebPart extends BaseClientSideWebPart<IContactsWebPartProps> {
 
   public render(): void {
-    const element: React.ReactElement<IContactsState > = React.createElement(
+ /*   const element: React.ReactElement<IContactsState > = React.createElement(
       Contacts,
       {
-        description: this.properties.description
+        prop1: "this.properties.description"
       }
-    );
+    );*/
 
-    ReactDom.render(element, this.domElement);
+  //  ReactDom.render(React.createElement(element, this.domElement);
+    ReactDom.render(React.createElement(Contacts,
+                                          {
+                                            spHttpClient:this.context.spHttpClient,
+                                            currentWebUrl:this.context.pageContext.web.absoluteUrl
+                                                            }
+                                                            ), this.domElement);
   }
 
   protected onDispose(): void {

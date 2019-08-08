@@ -1,17 +1,60 @@
+import { SPHttpClient, SPHttpClientResponse } from "@microsoft/sp-http";
+
+
 export default class ContactService{
 
     contactList=[
-        {id:0,name:'Sailesh',num:'8888888888',department:'IT'},
-        {id:1,name:'Rishith',num:'9999999999',department:'Sales'},
-        {id:2,name:'Sailesh2',num:'8888888888',department:'IT'},
-        {id:3,name:'Rishith2',num:'8888888888',department:'Sales'}
+       
         ];
 
-    public constructor(){
+    public constructor(client,webUrl){  
+        
 
     }
 
-    public getContacts(){
+    public getContact(spHttpClient,currentWebUrl){
+        let contact;
+        spHttpClient.get(`${currentWebUrl}/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items(1)`, SPHttpClient.configurations.v1).then((response: SPHttpClientResponse) => {
+
+            response.json().then((ListItems: any) => {
+            //  console.log(ListItems);
+            //  console.log(ListItems.value[0]);
+            contact= {name:ListItems.value['Title'],num:ListItems.value['num'],department:ListItems.value['department']}
+            console.log(contact);
+            return contact;
+    //           ListItems.value.map((list)=>{
+    //             //  console.log(list['Title'])
+    //               this.contactList.push({name:list['Title'],num:list['num'],department:list['department']})
+    //             })
+
+    //           //  console.log(this.contactList);
+                
+              
+    //          // console.log(ListItems.value[0]['Title']);
+             });
+           });
+    //    // console.log(this.contactList);
+    //     return this.contactList;
+    }
+
+    public getContacts(spHttpClient,currentWebUrl){
+        spHttpClient.get(`${currentWebUrl}/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items`, SPHttpClient.configurations.v1).then((response: SPHttpClientResponse) => {
+
+            response.json().then((ListItems: any) => {
+            //  console.log(ListItems);
+            //  console.log(ListItems.value[0]);
+              ListItems.value.map((list)=>{
+                //  console.log(list['Title'])
+                  this.contactList.push({name:list['Title'],num:list['num'],department:list['department']})
+                })
+
+              //  console.log(this.contactList);
+                
+              
+             // console.log(ListItems.value[0]['Title']);
+            });
+          });
+       // console.log(this.contactList);
         return this.contactList;
     }
 

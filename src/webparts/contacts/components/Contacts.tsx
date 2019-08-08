@@ -1,9 +1,8 @@
 import * as React from 'react';
 import styles from './Contacts.module.scss';
 import { IContactsState } from './IContactsState';
-import { getMockContacts } from './MockContacts';
 import ContactService from '../../contacts/services/ContactService';
-import { SPHttpClientResponse, SPHttpClient } from '@microsoft/sp-http';
+
 
 import EditForm from './EditForm/EditForm';
 import AddForm from './AddForm/AddForm';
@@ -12,21 +11,32 @@ import Header from './Header/Header';
 import ContactsList from './ContactsList/ContactsList';
 import { Contact } from '../../../Models/Contact';
 
+interface IContactsProps{
+  spHttpClient:any;
+  currentWebUrl:any;
 
-export default class Contacts extends React.Component<{}, IContactsState> {
+}
+
+
+export default class Contacts extends React.Component<IContactsProps, IContactsState> {
   selectedList: Contact[];
   service:ContactService;
   public constructor(props) {
     super(props); 
+  //  console.log(this.props.currentWebUrl);
+   // console.log(this.props.spHttpClient);
 
-    this.service=new ContactService();
+    this.service=new ContactService(this.props.spHttpClient,this.props.currentWebUrl);
 
     this.state = {
-      contactList: this.service.getContacts(),
-      activeContact: this.service.getContacts()[0],
+      contactList: this.service.getContacts(this.props.spHttpClient,this.props.currentWebUrl),
+      activeContact: this.service.getContact(this.props.spHttpClient,this.props.currentWebUrl),
       edit: false, 
       add: false
     };
+    console.log(this.service.contactList);
+
+   // console.log(this.state.activeContact);
     this.selectedList = this.state.contactList;
 
     this.setActiveContact=this.setActiveContact.bind(this);
@@ -36,7 +46,15 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     this.deactivateEditForm=this.deactivateEditForm.bind(this);
     this.addContact=this.addContact.bind(this);
     this.setSelectedList=this.setSelectedList.bind(this);
+    this.setDefaultActiveContact=this.setDefaultActiveContact.bind(this);
 
+    this.setDefaultActiveContact();
+
+  }
+
+  public setDefaultActiveContact(){
+    this.setState({activeContact:this.service.contactList[0]});
+    console.log(this.state.activeContact);
   }
 
   public setSelectedList(contactList){
@@ -85,7 +103,6 @@ export default class Contacts extends React.Component<{}, IContactsState> {
   }
 
   public render(): React.ReactElement<IContactsState> {
-
       return (
       <div className={styles.contact}>
 
