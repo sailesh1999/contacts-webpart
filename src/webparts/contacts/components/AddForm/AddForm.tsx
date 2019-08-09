@@ -6,7 +6,7 @@ import { Department } from "../../departments/departments";
 
 export default class AddForm extends React.Component<IAddFormProps,{}>{
     addForm:any;
-    inputContact:Contact={name:'',num:'',department:''};
+    inputContact:Contact={id:0,name:'',num:'',department:''};
     public constructor(props){
         super(props);
         this.state={inputContact:Contact};

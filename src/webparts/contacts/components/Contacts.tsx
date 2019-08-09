@@ -27,16 +27,21 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
    // console.log(this.props.spHttpClient);
 
     this.service=new ContactService(this.props.spHttpClient,this.props.currentWebUrl);
+    console.log("Calling service");
 
     this.state = {
-      contactList: this.service.getContacts(this.props.spHttpClient,this.props.currentWebUrl),
-      activeContact: this.service.getContact(this.props.spHttpClient,this.props.currentWebUrl),
+      contactList: this.service.getContacts(),
+      activeContact:{id:'',name:'',num:'',department:''}  ,    //this.service.setActiveContact(),
       edit: false, 
       add: false
     };
-    console.log(this.service.contactList);
+    //this.selectedList=this.state.contactList;
 
-   // console.log(this.state.activeContact);
+
+    console.log(this.state.contactList);
+
+   // console.log(this.service.activeContact);
+    console.log(this.state.activeContact);
     this.selectedList = this.state.contactList;
 
     this.setActiveContact=this.setActiveContact.bind(this);
@@ -46,16 +51,26 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.deactivateEditForm=this.deactivateEditForm.bind(this);
     this.addContact=this.addContact.bind(this);
     this.setSelectedList=this.setSelectedList.bind(this);
-    this.setDefaultActiveContact=this.setDefaultActiveContact.bind(this);
+   // this.setDefaultActiveContact=this.setDefaultActiveContact.bind(this);
 
-    this.setDefaultActiveContact();
+  //  this.setDefaultActiveContact();
 
   }
 
-  public setDefaultActiveContact(){
-    this.setState({activeContact:this.service.contactList[0]});
-    console.log(this.state.activeContact);
-  }
+
+
+  /*public setDefaultActiveContact(){
+    //while(this.state.activeContact==undefined){
+     // console.log(this.state.activeContact)
+      this.setState({activeContact:this.service.activeContact})
+
+    //}
+    
+   // this.setState({activeContact:this.service.getContact(this.props.spHttpClient,this.props.currentWebUrl)});
+  //  console.log(this.state.activeContact);
+    console.log(this.state.contactList);
+    console.log(this.service.activeContact);
+  }*/
 
   public setSelectedList(contactList){
     this.selectedList=contactList;
@@ -95,15 +110,17 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.setState({ add: false }) 
   }
   
-  public deleteContact(activeContact){
-    this.service.deleteContact(activeContact);
-    this.setState({ activeContact: this.state.contactList[0] });
+  public deleteContact(activeContactId){
+    this.service.deleteContact(activeContactId);
+    this.setState({ activeContact: this.state.contactList[0] ,contactList:this.service.getContacts()});
     this.forceUpdate();
 
   }
 
   public render(): React.ReactElement<IContactsState> {
       return (
+      
+      
       <div className={styles.contact}>
 
         <Header setSelectedList={this.setSelectedList} contactList={this.state.contactList} activateAddForm={this.activateAddForm} deactivateAddForm={this.deactivateAddForm} activateEditForm={this.activateEditForm} deactivateEditForm={this.deactivateEditForm}/>
@@ -113,7 +130,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
           <Detail activeContact={this.state.activeContact}/>
             <div className={styles["edit-options"]}>
                   <button className={styles.edit} onClick={(e) => this.setState({ edit: true, add: false })}>EDIT</button>
-                  <button onClick={(e)=>this.deleteContact(this.state.activeContact)}   >Delete Contact</button>
+                  <button onClick={(e)=>this.deleteContact(this.state.activeContact.id)}   >Delete Contact</button>
             </div>
         </div>
 
@@ -124,6 +141,6 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
         <br></br>
 
       </div>
-    );
+      )
   }
 }

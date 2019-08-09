@@ -1,60 +1,46 @@
-import { SPHttpClient, SPHttpClientResponse } from "@microsoft/sp-http";
+import { Contact } from './../../../Models/Contact';
+import { SPHttpClient, SPHttpClientResponse, ISPHttpClientOptions } from "@microsoft/sp-http";
+import * as React from "react";
 
+// interface IContactServiceState{
+//   activeContact:any;
+// }
 
-export default class ContactService{
+// interface IContactServiceProps{
+
+// }
+
+export default class ContactService {
 
     contactList=[
        
         ];
 
-    public constructor(client,webUrl){  
-        
+
+    spHttpClient:SPHttpClient;
+    currentWebUrl:string;
+
+    public constructor(spHttpClient:SPHttpClient,currentWebUrl:string){  
+
+      this.spHttpClient=spHttpClient;
+      this.currentWebUrl=currentWebUrl;
+
+ 
 
     }
 
-    public getContact(spHttpClient,currentWebUrl){
-        let contact;
-        spHttpClient.get(`${currentWebUrl}/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items(1)`, SPHttpClient.configurations.v1).then((response: SPHttpClientResponse) => {
+    
+    public getContacts(){
+      this.contactList=[]
+        this.spHttpClient.get(`${this.currentWebUrl}/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items`, SPHttpClient.configurations.v1).then((response: SPHttpClientResponse) => {
 
             response.json().then((ListItems: any) => {
-            //  console.log(ListItems);
-            //  console.log(ListItems.value[0]);
-            contact= {name:ListItems.value['Title'],num:ListItems.value['num'],department:ListItems.value['department']}
-            console.log(contact);
-            return contact;
-    //           ListItems.value.map((list)=>{
-    //             //  console.log(list['Title'])
-    //               this.contactList.push({name:list['Title'],num:list['num'],department:list['department']})
-    //             })
-
-    //           //  console.log(this.contactList);
-                
-              
-    //          // console.log(ListItems.value[0]['Title']);
-             });
-           });
-    //    // console.log(this.contactList);
-    //     return this.contactList;
-    }
-
-    public getContacts(spHttpClient,currentWebUrl){
-        spHttpClient.get(`${currentWebUrl}/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items`, SPHttpClient.configurations.v1).then((response: SPHttpClientResponse) => {
-
-            response.json().then((ListItems: any) => {
-            //  console.log(ListItems);
-            //  console.log(ListItems.value[0]);
+      
               ListItems.value.map((list)=>{
-                //  console.log(list['Title'])
-                  this.contactList.push({name:list['Title'],num:list['num'],department:list['department']})
+                  this.contactList.push({id:list['ID'],name:list['Title'],num:list['num'],department:list['department']})
                 })
-
-              //  console.log(this.contactList);
-                
-              
-             // console.log(ListItems.value[0]['Title']);
             });
           });
-       // console.log(this.contactList);
         return this.contactList;
     }
 
@@ -62,7 +48,46 @@ export default class ContactService{
         this.contactList.push(contact);
     }
 
-    public deleteContact(activeContact){
-        this.contactList.splice(this.contactList.indexOf(activeContact), 1);  
+    public deleteContact(activeContactId){
+      const spOpts: ISPHttpClientOptions = {
+        headers: {
+          'Accept': 'application/json;odata=nometadata',
+          'Content-type': 'application/json;odata=verbose',
+          'odata-version': '',
+          "IF-MATCH": "*",
+          'X-HTTP-Method': 'DELETE'
+        }      };
+        let deleteString=this.currentWebUrl+"/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items("+activeContactId+")"
+        this.spHttpClient.post(deleteString,SPHttpClient.configurations.v1,spOpts);
+        //this.contactList.splice(activeContactId, 1);  
     }
 }
+
+
+
+
+
+
+
+
+
+
+// public setActiveContact(){
+    //     this.spHttpClient.get(`${this.currentWebUrl}/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items(2)`, SPHttpClient.configurations.v1,
+    //   {
+    //     headers: {
+    //       accept: "application/json"
+    //     }
+    //   }).then((response: SPHttpClientResponse) => {
+
+    //     response.json().then((item:any)=>{
+
+    //       this.activeContact={name:item.d.Title,num:item.d.num,department:item.d.department}
+    //       console.log(this.activeContact);
+    //       //return(this.activeContact);
+    //     })
+    //   })
+    //   console.log(this.activeContact)
+
+    //   //return this.activeContact;    
+    // }
