@@ -39,7 +39,7 @@ export default class EditForm extends React.Component<IEditFormProps,IEditFormSt
             </select>
               <button onClick={(e)=>
                 {
-                    this.props.setActCon(this.props.activeContact);
+                    this.props.editContact(this.props.activeContact);
                     this.props.deactivateEditForm();
                     this.forceUpdate();
                 }}

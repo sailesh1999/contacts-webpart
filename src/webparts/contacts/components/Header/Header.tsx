@@ -37,6 +37,7 @@ public constructor(props:IHeaderDetailProps){
                     <select
                       onChange={(e) => {
                         this.props.setSelectedList([]);
+                        this.filteredList=[];
   
                         if (e.target.value == "All") {
                             this.props.setSelectedList(this.props.contactList);

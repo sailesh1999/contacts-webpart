@@ -4,4 +4,5 @@ export interface IEditFormProps{
     activeContact:any;
     setActCon:any;
     deactivateEditForm:any;
+    editContact:any;
 }
