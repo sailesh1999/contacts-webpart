@@ -1,7 +1,10 @@
+import { Contact } from "../../../Models/Contact";
+
 export interface IContactsState  {
-  contactList:any;
-  activeContact:any;
- selectedList:any;
+  loading:boolean;
+  contactList:Contact[];
+  activeContact:Contact;
+ selectedList:Contact[];
   edit:boolean;
   add:boolean;
 }

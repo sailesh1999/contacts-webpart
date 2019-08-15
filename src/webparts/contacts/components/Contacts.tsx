@@ -10,35 +10,31 @@ import Detail from './Detail/Detail';
 import Header from './Header/Header';
 import ContactsList from './ContactsList/ContactsList';
 import { Contact } from '../../../Models/Contact';
+import { SPHttpClient } from '@microsoft/sp-http';
 
 interface IContactsProps{
-  spHttpClient:any;
-  currentWebUrl:any;
+  spHttpClient:SPHttpClient;
+  currentWebUrl:string;
 
 }
 
 
 export default class Contacts extends React.Component<IContactsProps, IContactsState> {
-  //selectedList: Contact[];
   service:ContactService;
   public constructor(props) {
     super(props); 
-  
+    
     this.service=new ContactService(this.props.spHttpClient,this.props.currentWebUrl);
     console.log("Calling service");
 
     this.state = {
-      contactList: this.service.getContacts(),
+      loading:true,
+      contactList: [],
       selectedList:[],
-      activeContact:{id:'',name:'',num:'',department:''}  ,    //this.service.setActiveContact(),
+      activeContact:new Contact(),//{id:-1,name:'',num:'',department:''}  ,    //this.service.setActiveContact(),
       edit: false, 
       add: false
     };
-
-    //this.selectedList = this.state.contactList;
-
-    //console.log(this.selectedList);
-    //this.forceUpdate();
 
     this.setActiveContact=this.setActiveContact.bind(this);
     this.activateAddForm=this.activateAddForm.bind(this);
@@ -52,20 +48,34 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
   }
 
   public componentDidMount(){
+    
+    this.service.getContacts()
+                    .then((ListItems: any) => {
+                                              //console.log(ListItems);
+                                              ListItems.value.map((list)=>{
+                                                let cont = new Contact(list['ID'],list['Title'],list['num'],list['department'])
+                                              this.state.contactList.push(cont);//{id:list['ID'],name:list['Title'],num:list['num'],department:list['department']});
+                                              //console.log(x);
+                          })
+                          return true;
+                       })
+                       .then((e)=>{
+                         this.setState({loading:false});
+                         this.forceUpdate()
+                            });
+
+
     this.setState({selectedList:this.state.contactList})
-    console.log("Updated selected list")
+    console.log("Contacts loaded");
   }
 
   public setContactList(contactList)
   {
     this.setState({contactList:contactList});
-    this.forceUpdate();
   }
 
   public setSelectedList(contactList){
-    //this.selectedList=contactList;
     this.setState({selectedList:contactList});
-    this.forceUpdate();
   }
   
   public setActiveContact(contact){
@@ -76,30 +86,33 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
   public activateAddForm()
   {
     this.setState({add:true});
-    this.forceUpdate();
   }
 
   public deactivateAddForm()
   {
     this.setState({add:false});
-    this.forceUpdate();
   }
 
   public activateEditForm()
   {
     this.setState({edit:true});
-    this.forceUpdate();
   }
 
   public deactivateEditForm()
   {
     this.setState({edit:false});
-    this.forceUpdate();
   }
 
-  public addContact(contact){
+  public addContact(contact:Contact){
     this.setActiveContact({id:'',name:'',num:'',department:''});
-    this.service.addContact(contact).then((e)=>this.setState({contactList:this.service.getContacts()}));
+    this.service.addContact(contact).then((response)=>{
+      return response.json()
+      .then((addedContact)=>{
+        contact.id=addedContact.d.Id
+      })
+      
+    });
+    this.state.contactList.push(contact);
     this.setState({ add: false }) 
   }
 
@@ -107,18 +120,31 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.service.editContact(contact);
     this.setState({edit:false});
   }
-  
-  public deleteContact(activeContactId){
-    this.setActiveContact({id:'',name:'',num:'',department:''});
-    console.log(this.state.activeContact);
-    
-    this.service.deleteContact(activeContactId).then((e)=>{
-                                                          this.setState({contactList:this.service.getContacts()});
-                                                          })
-    console.log("Deleted contact and updated list");
-    
-    this.forceUpdate();
 
+  public findContactIndex(contactId:number)
+  {
+    let ind=0;
+    this.state.contactList.map((contact:Contact)=>{
+        if(contact.id==contactId)
+        {
+          return ind;
+        }
+        ind++;
+    })
+    return ind;
+    
+  }
+  
+  public deleteContact(activeContactId:number){
+    this.setActiveContact({id:'',name:'',num:'',department:''});
+    //console.log(this.state.activeContact);
+    let ind:number=this.findContactIndex(activeContactId);
+    //console.log(ind);
+    this.service.deleteContact(activeContactId);
+    this.state.contactList.splice(ind,1);
+    //console.log(this.state.contactList);
+    this.forceUpdate();
+    console.log("Deleted contact and updated list");    
   }
 
   public render(): React.ReactElement<IContactsState> {
@@ -128,7 +154,6 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
       <div className={styles.contact}>
 
         <Header setSelectedList={this.setSelectedList} contactList={this.state.contactList} activateAddForm={this.activateAddForm} deactivateAddForm={this.deactivateAddForm} activateEditForm={this.activateEditForm} deactivateEditForm={this.deactivateEditForm}/>
-        {console.log("Sending data to list")}
         <ContactsList activeContact={this.state.activeContact} setActiveContact={this.setActiveContact} selectedList={this.state.selectedList}/>
 
         <div className={styles["active-contact-details"]}>

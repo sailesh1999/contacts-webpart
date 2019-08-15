@@ -1,14 +1,15 @@
 import * as React from "react";
 import styles from '../Contacts.module.scss';
+import { Contact } from "../../../../Models/Contact";
 
 interface IContactsListProps{
-   selectedList:any;
+   selectedList:Contact[];
    setActiveContact:any;
-   activeContact:any;
+   activeContact:Contact;
 }
 
 export default class ContactsList extends React.Component<IContactsListProps,{}>{
-    filteredList:any=[];
+    filteredList:Contact[]=[];
 public constructor(props:IContactsListProps){
     super(props);
 }
@@ -23,7 +24,7 @@ public constructor(props:IContactsListProps){
                 <li onClick={(e) => { 
                     this.props.setActiveContact(contact);
                  //   this.setState({ activeContact: contact });
-                     this.forceUpdate()
+                  //   this.forceUpdate()
                       }
                       }   > 
                       <h1 className={styles["list-contact-name"]}>{contact.name}</h1> 

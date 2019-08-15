@@ -2,19 +2,9 @@ import { Contact } from './../../../Models/Contact';
 import { SPHttpClient, SPHttpClientResponse, ISPHttpClientOptions } from "@microsoft/sp-http";
 import * as React from "react";
 
-// interface IContactServiceState{
-//   activeContact:any;
-// }
-
-// interface IContactServiceProps{
-
-// }
 
 export default class ContactService {
 
-    contactList=[
-       
-        ];
 
 
     spHttpClient:SPHttpClient;
@@ -29,42 +19,15 @@ export default class ContactService {
 
     }
 
-    // public getContactsPromise()
-    // {
-    //   this.contactList=[]
-    //     this.spHttpClient.get(`${this.currentWebUrl}/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items`, SPHttpClient.configurations.v1).then((response: SPHttpClientResponse) => {
-
-    //         response.json().then((ListItems: any) => {
-      
-    //           ListItems.value.map((list)=>{
-    //               this.contactList.push({id:list['ID'],name:list['Title'],num:list['num'],department:list['department']})
-    //             })
-    //         });
-    //       });
-    //      //this.contactList;
-
-    //      let promise = new Promise(function(resolve,reject){
-
-    //      })
-
-    // }
-
-
     public getContacts(){
-      this.contactList=[]
-        this.spHttpClient.get(`${this.currentWebUrl}/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items`, SPHttpClient.configurations.v1).then((response: SPHttpClientResponse) => {
+        return this.spHttpClient.get(`${this.currentWebUrl}/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items`, SPHttpClient.configurations.v1).then((response: SPHttpClientResponse) => {
 
-            response.json().then((ListItems: any) => {
-      
-              ListItems.value.map((list)=>{
-                  this.contactList.push({id:list['ID'],name:list['Title'],num:list['num'],department:list['department']})
-                })
-            });
+            return response.json();
+            
           });
-        return this.contactList;
     }
 
-    public addContact(contact){
+    public addContact(contact:Contact){
         let postString=this.currentWebUrl+"/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items"
         const spOpts: ISPHttpClientOptions = {
           headers: {
@@ -85,7 +48,8 @@ export default class ContactService {
         return this.spHttpClient.post(postString,SPHttpClient.configurations.v1,spOpts)
     }
 
-    public editContact(contact){
+    public editContact(contact:Contact){
+      
       let editString=this.currentWebUrl+"/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items("+contact.id+")"
       const spOpts:ISPHttpClientOptions={
         headers:{
@@ -108,7 +72,7 @@ export default class ContactService {
       this.spHttpClient.post(editString,SPHttpClient.configurations.v1,spOpts).then((e)=>console.log("Updated list item"))
     }
 
-    public deleteContact(activeContactId){
+    public deleteContact(activeContactId:number){
       const spOpts: ISPHttpClientOptions = {
         headers: {
           'Accept': 'application/json;odata=nometadata',

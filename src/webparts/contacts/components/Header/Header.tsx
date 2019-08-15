@@ -52,7 +52,7 @@ public constructor(props:IHeaderDetailProps){
                           });
                           this.props.setSelectedList(this.filteredList);
                         }
-                        this.forceUpdate();
+                     //   this.forceUpdate();
                       }}
                     >
                       <option value="All">All</option>
