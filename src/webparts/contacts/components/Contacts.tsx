@@ -81,6 +81,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
   
   public setActiveContact(contact){
     this.setState({activeContact:contact});
+  //  console.log(this.state.activeContact)
     return this.state.activeContact;
   }
 
@@ -124,26 +125,31 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
 
   public findContactIndex(contactId:number)
   {
-    let ind=0;
-    this.state.contactList.map((contact:Contact)=>{
+    let ind,i=0;
+    /*this.state.contactList.map((contact:Contact)=>{
         if(contact.id==contactId)
         {
-          return ind;
+          ind=i;
         }
-        ind++;
-    })
+        i++;
+    })*/
+    for(i=0;i<this.state.contactList.length;i++)
+    {
+      if(this.state.contactList[i].id==contactId)
+      {
+        ind=i;
+        break;
+      }
+    }
     return ind;
     
   }
   
   public deleteContact(activeContactId:number){
     this.setActiveContact({id:'',name:'',num:'',department:''});
-    //console.log(this.state.activeContact);
     let ind:number=this.findContactIndex(activeContactId);
-    //console.log(ind);
     this.service.deleteContact(activeContactId);
     this.state.contactList.splice(ind,1);
-    //console.log(this.state.contactList);
     this.forceUpdate();
     console.log("Deleted contact and updated list");    
   }

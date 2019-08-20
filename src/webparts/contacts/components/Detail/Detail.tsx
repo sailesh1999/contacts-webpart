@@ -21,7 +21,6 @@ export default class Detail extends React.Component<IDetailProps,IDetailState>
 
         return(
             <div>
-
             <h1 className={styles["detail-name"]}>{this.props.activeContact.name}</h1>
             <h1 className={styles["detail-value"]}>{this.props.activeContact.num}</h1>
             <h1 className={styles["detail-value"]}>{this.props.activeContact.department}</h1>
