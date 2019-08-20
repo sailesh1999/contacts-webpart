@@ -1,5 +1,8 @@
 import * as React from 'react';
 import styles from './Contacts.module.scss';
+import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
+
+
 import { IContactsState } from './IContactsState';
 import ContactService from '../../contacts/services/ContactService';
 
@@ -31,7 +34,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
       loading:true,
       contactList: [],
       selectedList:[],
-      activeContact:new Contact(),//{id:-1,name:'',num:'',department:''}  ,    //this.service.setActiveContact(),
+      activeContact:new Contact(),
       edit: false, 
       add: false
     };
@@ -51,11 +54,9 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     
     this.service.getContacts()
                     .then((ListItems: any) => {
-                                              //console.log(ListItems);
                                               ListItems.value.map((list)=>{
                                                 let cont = new Contact(list['ID'],list['Title'],list['num'],list['department'])
-                                              this.state.contactList.push(cont);//{id:list['ID'],name:list['Title'],num:list['num'],department:list['department']});
-                                              //console.log(x);
+                                              this.state.contactList.push(cont);
                           })
                           return true;
                        })
@@ -159,8 +160,8 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
         <div className={styles["active-contact-details"]}>
           <Detail activeContact={this.state.activeContact}/>
             <div className={styles["edit-options"]}>
-                  <button className={styles.edit} onClick={(e) => this.setState({ edit: true, add: false })}>EDIT</button>
-                  <button onClick={(e)=>this.deleteContact(this.state.activeContact.id)}   >Delete Contact</button>
+                  <PrimaryButton className={styles.edit} onClick={(e) => this.setState({ edit: true, add: false })}>EDIT</PrimaryButton>
+                  <DefaultButton onClick={(e)=>this.deleteContact(this.state.activeContact.id)}   >Delete Contact</DefaultButton>
             </div>
         </div>
 

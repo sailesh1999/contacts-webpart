@@ -23,8 +23,7 @@ public constructor(props:IContactsListProps){
                 (contact, i) => 
                 <li onClick={(e) => { 
                     this.props.setActiveContact(contact);
-                 //   this.setState({ activeContact: contact });
-                  //   this.forceUpdate()
+                
                       }
                       }   > 
                       <h1 className={styles["list-contact-name"]}>{contact.name}</h1> 

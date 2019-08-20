@@ -44,7 +44,6 @@ public constructor(props:IHeaderDetailProps){
   
                         }
                         else {
-                         // this.props.setSelectedList([])
                           this.props.contactList.map((contact, i) => {
                             if (contact.department == e.target.value) {
                               this.filteredList.push(contact);
@@ -52,7 +51,6 @@ public constructor(props:IHeaderDetailProps){
                           });
                           this.props.setSelectedList(this.filteredList);
                         }
-                     //   this.forceUpdate();
                       }}
                     >
                       <option value="All">All</option>

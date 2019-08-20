@@ -18,14 +18,7 @@ export interface IContactsWebPartProps {
 export default class ContactsWebPart extends BaseClientSideWebPart<IContactsWebPartProps> {
 
   public render(): void {
- /*   const element: React.ReactElement<IContactsState > = React.createElement(
-      Contacts,
-      {
-        prop1: "this.properties.description"
-      }
-    );*/
 
-  //  ReactDom.render(React.createElement(element, this.domElement);
     ReactDom.render(React.createElement(Contacts,
                                           {
                                             spHttpClient:this.context.spHttpClient,
