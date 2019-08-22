@@ -4,19 +4,23 @@ import { Contact } from "../../../../Models/Contact";
 import { Department } from "../../departments/departments";
 
 interface IHeaderDetailProps{
-    setSelectedList:any;
+    setSelectedList:((contactList:Contact[])=>void);
     contactList:Contact[];
-    activateAddForm:any;
-    deactivateAddForm:any;
-    activateEditForm:any;
-    deactivateEditForm:any;
+    activateAddForm:(()=>void);
+    deactivateAddForm:(()=>void);
+    activateEditForm:(()=>void);
+    deactivateEditForm:(()=>void);
+    setFilter:((filter:string)=>void);
+    setActiveContact:((contact:Contact)=>Contact);
 }
+
 
 export default class Header extends React.Component<IHeaderDetailProps,{}>{
     filteredList:Contact[]=[];
 public constructor(props:IHeaderDetailProps){
     super(props);
 }
+
 
     public render():React.ReactElement<{}>{
         return(
@@ -36,21 +40,25 @@ public constructor(props:IHeaderDetailProps){
                   <li className={styles["menu-item"]}>
                     <select
                       onChange={(e) => {
+                        this.props.setActiveContact(new Contact());
+                        this.props.setFilter(e.target.value);
                         this.props.setSelectedList([]);
                         this.filteredList=[];
-  
+                        
                         if (e.target.value == "All") {
-                            this.props.setSelectedList(this.props.contactList);
-  
-                        }
-                        else {
+                    
+                          this.props.setSelectedList(this.props.contactList);
+                      
+                          }
+                          else {
                           this.props.contactList.map((contact, i) => {
-                            if (contact.department == e.target.value) {
-                              this.filteredList.push(contact);
-                            }
+                          if (contact.department == e.target.value) {
+                            this.filteredList.push(contact);
+                          }
                           });
                           this.props.setSelectedList(this.filteredList);
-                        }
+                          }
+                        
                       }}
                     >
                       <option value="All">All</option>

@@ -4,12 +4,11 @@ import { Contact } from "../../../../Models/Contact";
 
 interface IContactsListProps{
    selectedList:Contact[];
-   setActiveContact:any;
+   setActiveContact:((contact:Contact)=>Contact);
    activeContact:Contact;
 }
 
 export default class ContactsList extends React.Component<IContactsListProps,{}>{
-   // filteredList:Contact[]=[];
    contactsListDOM;
 public constructor(props:IContactsListProps){
     super(props);
@@ -18,6 +17,8 @@ public constructor(props:IContactsListProps){
 
     this.generateContactsListDOM();
 }
+
+
 
 public generateContactsListDOM()
 {

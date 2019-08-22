@@ -1,21 +1,41 @@
 import * as React from "react";
-import {IEditFormProps} from './IEditFormProps';
-import {IEditFormState} from './IEditFormState';
+
+import {IFormProps} from './IFormProps';
+import {Contact} from '../../../../Models/Contact';
 import { Department } from "../../departments/departments";
 
-
-export default class EditForm extends React.Component<IEditFormProps,IEditFormState>{
-    editForm:any;
-    public constructor(props:IEditFormProps){
+export default class Form extends React.Component<IFormProps,{}>{
+    form:any;
+    inputContact:Contact=new Contact();//{id:0,name:'',num:'',department:''};
+    public constructor(props){
         super(props);
+        this.state={inputContact:Contact};
 
-        this.editFormDOM=this.editFormDOM.bind(this);
+        this.addFormDOM=this.addFormDOM.bind(this);
+
+
     }
 
-    public editFormDOM()
-    {
-      if(this.props.edit){
-        this.editForm=    <div>
+    public addFormDOM(){
+      if (this.props.add) {
+        this.form = <div>
+          <h3>Addcontact:</h3>
+          name:<input type="text" onChange={(e) =>  this.inputContact.name= e.target.value }></input>
+          number:<input type="text" onChange={(e) => this.inputContact.num= e.target.value}></input>
+          department:
+       <select onChange={(e) => this.inputContact.department= e.target.value}>
+            <option value="NotSpecified">Select</option>
+            <option value={Department.IT}>IT</option>
+            <option value={Department.Sales}>Sales</option>
+          </select>
+          <button onClick={(e)=>this.props.deactivateAddForm()}> Cancel</button>
+          <button onClick={(e)=>this.props.addContact(this.inputContact)}> Done</button>
+  
+        </div>
+  
+      }
+      else if(this.props.edit){
+        this.form=    <div>
         <h3>Edit selected contact:</h3>
         name:<input type="text" value={this.props.activeContact.name} onChange={
                                           (e)=> 
@@ -39,6 +59,7 @@ export default class EditForm extends React.Component<IEditFormProps,IEditFormSt
             <option value={Department.IT}>IT</option>
             <option value={Department.Sales}>Sales</option>
         </select>
+
           <button onClick={(e)=>
             {
                 this.props.editContact(this.props.activeContact);
@@ -48,18 +69,19 @@ export default class EditForm extends React.Component<IEditFormProps,IEditFormSt
             >Done</button>
         </div>
       }
-      else{
-        this.editForm=null;
+      else {
+        this.form = null;
       }
+
+    }
+
+    public render():React.ReactElement<IFormProps>{
+      { this.addFormDOM()}
+      return(this.form);
+
+
     }
 
     
-    public render():React.ReactElement<IEditFormState>{
-        {this.editFormDOM()}
-        return(this.editForm);
-           
-            
-        
-    }
-       
-    }
+}
+
