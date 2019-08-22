@@ -20,7 +20,7 @@ export default class ContactService {
     }
 
     public getContacts(){
-        return this.spHttpClient.get(`${this.currentWebUrl}/sites/feature-testing/_api/web/lists/GetByTitle('Contacts')/items`, SPHttpClient.configurations.v1).then((response: SPHttpClientResponse) => {
+        return this.spHttpClient.get(`${this.currentWebUrl}/_api/web/lists/GetByTitle('Contacts')/items`, SPHttpClient.configurations.v1).then((response: SPHttpClientResponse) => {
 
             return response.json();
             
