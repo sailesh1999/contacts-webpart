@@ -20,14 +20,20 @@ export default class Form extends React.Component<IFormProps, IFormState>{
     this.sendData = this.sendData.bind(this);
   }
 
-  public componentWillReceiveProps() {
-    this.setState({ inputContact: this.props.activeContact }, () => { console.log(this.state.inputContact) })
+  public componentWillReceiveProps() {   
+    this.setState({ inputContact: this.props.activeContact })
+  }
+
+  public componentDidUpdate(prevProps:IFormProps){
+    if(this.props.activeContact!=prevProps.activeContact)
+    {
+      this.setState({ inputContact: this.props.activeContact })
+    }
   }
 
   public handleChange(e) {
     let contact: Contact = new Contact(this.state.inputContact)
     contact[e.target.name] = e.target.value;
-    console.log(this.state.inputContact)
     this.setState({ inputContact: contact })
   }
 

@@ -1,10 +1,12 @@
 import * as React from "react";
 import styles from '../Contacts.module.scss';
 import { Contact } from "../../../../Models/Contact";
+import { FormTypes } from "../Form/FormTypes";
 
 interface IContactsListProps {
     selectedList: Contact[];
     setActiveContact: ((contact: Contact) => Contact);
+    setFormType:((formType:FormTypes)=>void)
 }
 
 export default class ContactsList extends React.Component<IContactsListProps, {}>{
@@ -27,6 +29,7 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
                     {this.props.selectedList.map(
                         (contact, i) =>
                             <li onClick={(e) => {
+                                this.props.setFormType(FormTypes.None);
                                 this.props.setActiveContact(contact);
                             }
                             }   >

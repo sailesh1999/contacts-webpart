@@ -24,7 +24,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
 
   public constructor(props:IContactsProps) {
     super(props);
-    this.service = new ContactService(this.props.spHttpClient, this.props.currentWebUrl);
+    this.service = new ContactService();
     this.state = {
       contactList: [],
       selectedList: [],
@@ -176,6 +176,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
         <ContactsList
           setActiveContact={this.setActiveContact}
           selectedList={this.state.selectedList}
+          setFormType={this.setFormType}
         />
 
         {this.detailDOM()}

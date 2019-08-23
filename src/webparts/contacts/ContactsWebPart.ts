@@ -18,12 +18,7 @@ export default class ContactsWebPart extends BaseClientSideWebPart<IContactsWebP
 
   public render(): void {
 
-    ReactDom.render(React.createElement(Contacts,
-      {
-        spHttpClient: this.context.spHttpClient,
-        currentWebUrl: this.context.pageContext.web.absoluteUrl
-      }
-    ), this.domElement);
+    ReactDom.render(React.createElement(Contacts), this.domElement);
   }
 
   protected onDispose(): void {

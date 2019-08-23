@@ -8,9 +8,8 @@ export default class ContactService implements IContactService {
   private spHttpClient: SPHttpClient;
   private currentWebUrl: string;
 
-  public constructor(spHttpClient: SPHttpClient, currentWebUrl: string) {
-    this.spHttpClient = spHttpClient;
-    this.currentWebUrl = currentWebUrl;
+  public constructor() {
+    
   }
 
   public getList(): List {
