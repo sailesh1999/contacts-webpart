@@ -9,7 +9,6 @@ import {
 
 import * as strings from 'ContactsWebPartStrings';
 import Contacts from './components/Contacts';
-import { IContactsState } from './components/IContactsState';
 
 export interface IContactsWebPartProps {
   description: string;
@@ -20,11 +19,11 @@ export default class ContactsWebPart extends BaseClientSideWebPart<IContactsWebP
   public render(): void {
 
     ReactDom.render(React.createElement(Contacts,
-                                          {
-                                            spHttpClient:this.context.spHttpClient,
-                                            currentWebUrl:this.context.pageContext.web.absoluteUrl
-                                                            }
-                                                            ), this.domElement);
+      {
+        spHttpClient: this.context.spHttpClient,
+        currentWebUrl: this.context.pageContext.web.absoluteUrl
+      }
+    ), this.domElement);
   }
 
   protected onDispose(): void {

@@ -5,8 +5,8 @@ import { IContactService } from './IContactService';
 
 
 export default class ContactService implements IContactService {
-  spHttpClient: SPHttpClient;
-  currentWebUrl: string;
+  private spHttpClient: SPHttpClient;
+  private currentWebUrl: string;
 
   public constructor(spHttpClient: SPHttpClient, currentWebUrl: string) {
     this.spHttpClient = spHttpClient;

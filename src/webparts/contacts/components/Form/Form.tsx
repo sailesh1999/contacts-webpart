@@ -10,10 +10,9 @@ interface IFormState {
 }
 
 export default class Form extends React.Component<IFormProps, IFormState>{
-  form;
   formType: FormTypes;
   inputContact: Contact = new Contact();
-  public constructor(props) {
+  public constructor(props: IFormProps) {
     super(props);
     this.state = { inputContact: this.props.activeContact };
     this.formDOM = this.formDOM.bind(this);
@@ -64,20 +63,18 @@ export default class Form extends React.Component<IFormProps, IFormState>{
 
   public formDOM() {
     if (this.props.formType == FormTypes.None) {
-      this.form = null;
+      return null;
     }
     else {
-      this.form = <div>
+      return (<div>
         <h3>{FormTypes[this.props.formType]} contact:</h3>
         name:<input type="text" name="name" value={this.state.inputContact.name} onChange={
           (e) => this.handleChange(e)
         } >
-
         </input>
         number:<input type="text" name="num" value={this.state.inputContact.num} onChange={
           (e) => this.handleChange(e)
         }></input>
-
         <select value={this.state.inputContact.department} name="department" onChange={(e) => this.handleChange(e)}>
           <option value="NotSpecified">Select</option>
           <option value={Department.IT}>IT</option>
@@ -85,15 +82,12 @@ export default class Form extends React.Component<IFormProps, IFormState>{
         </select>
 
         {this.sendData()}
-      </div>
+      </div>)
     }
   }
 
   public render(): React.ReactElement<IFormState> {
-    { this.formDOM() }
-    return (this.form);
+    return (this.formDOM());
   }
-
-
 }
 

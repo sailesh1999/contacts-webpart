@@ -19,10 +19,10 @@ interface IContactsProps {
 }
 
 export default class Contacts extends React.Component<IContactsProps, IContactsState> {
-  service: ContactService;
+  private service: ContactService;
   contactList: Contact[] = [];
 
-  public constructor(props) {
+  public constructor(props:IContactsProps) {
     super(props);
     this.service = new ContactService(this.props.spHttpClient, this.props.currentWebUrl);
     this.state = {
@@ -115,7 +115,6 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
       })
   }
 
-
   public deleteContact(activeContactId: number) {
     this.setFormType(FormTypes.None);
     this.setActiveContact({ id: -1, name: '', num: '', department: '' });
@@ -144,11 +143,11 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
         <div className={styles["active-contact-details"]}>
           <Detail activeContact={this.state.activeContact} />
           <div className={styles["edit-options"]}>
-            
+
             <PrimaryButton className={styles.edit} onClick={(e) => {
               this.setState({ formType: FormTypes.Edit })
             }}>EDIT</PrimaryButton>
-            
+
             <DefaultButton onClick={(e) => {
               this.deleteContact(this.state.activeContact.id);
             }

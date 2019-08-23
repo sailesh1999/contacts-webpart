@@ -9,23 +9,40 @@ interface IHeaderDetailProps {
   contactList: Contact[];
   setFilter: ((filter: string) => void);
   setActiveContact: ((contact: Contact) => Contact);
-  setFormType: ((formType:FormTypes)=>void);
+  setFormType: ((formType: FormTypes) => void);
 }
-
 
 export default class Header extends React.Component<IHeaderDetailProps, {}>{
   filteredList: Contact[] = [];
   public constructor(props: IHeaderDetailProps) {
     super(props);
+    this.changeFilter = this.changeFilter.bind(this);
   }
 
+  public changeFilter(e) {
+    this.props.setActiveContact(new Contact());
+    this.props.setFilter(e.target.value);
+    this.props.setSelectedList([]);
+    this.filteredList = [];
+
+    if (e.target.value == Department.All) {
+      this.props.setSelectedList(this.props.contactList);
+    }
+    else {
+      this.props.contactList.map((contact, i) => {
+        if (contact.department == e.target.value) {
+          this.filteredList.push(contact);
+        }
+      });
+      this.props.setSelectedList(this.filteredList);
+    }
+  }
 
   public render(): React.ReactElement<{}> {
     return (
       <div className={styles["header-container"]}>
         <div className={styles.header}>
           <p className={styles.title}>Address Book</p>
-
         </div>
 
         <div className={styles.menu}>
@@ -34,42 +51,19 @@ export default class Header extends React.Component<IHeaderDetailProps, {}>{
               <li className={styles["menu-item"]} onClick={(e) => {
                 this.props.setFormType(FormTypes.Add);
                 this.props.setActiveContact(new Contact())
-
               }} >+add </li>
+
               <li className={styles["menu-item"]}>
                 <select
-                  onChange={(e) => {
-                    this.props.setActiveContact(new Contact());
-                    this.props.setFilter(e.target.value);
-                    this.props.setSelectedList([]);
-                    this.filteredList = [];
-
-                    if (e.target.value == Department.All) {
-
-                      this.props.setSelectedList(this.props.contactList);
-
-                    }
-                    else {
-                      this.props.contactList.map((contact, i) => {
-                        if (contact.department == e.target.value) {
-                          this.filteredList.push(contact);
-                        }
-                      });
-                      this.props.setSelectedList(this.filteredList);
-                    }
-
-                  }}
+                  onChange={(e) => this.changeFilter(e)}
                 >
                   <option value={Department.All}>All</option>
                   <option value={Department.IT}>IT</option>
                   <option value={Department.Sales}>Sales</option>
                 </select> </li>
-
             </ul>
-
           </nav>
         </div>
-
       </div>
     )
   }
