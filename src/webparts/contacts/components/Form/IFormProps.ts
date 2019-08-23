@@ -1,13 +1,10 @@
 import { Contact } from "../../../../Models/Contact";
+import { FormTypes } from "./FormTypes";
 
 export interface IFormProps{
-    add:boolean;
     addContact:((contact:Contact)=>void);
-    edit:boolean;
     activeContact:Contact;
-    setActCon:((contact:Contact)=>Contact)
-    deactivateAddForm:(()=>void);
-    deactivateEditForm:(()=>void);
     editContact:((contact:Contact)=>void);
-    
+    formType:FormTypes;
+    setFormType:((formType:FormTypes)=>void);
 }

@@ -1,10 +1,11 @@
 import { Contact } from "../../../Models/Contact";
+import { FormTypes } from "./Form/FormTypes";
+import { Department } from "../departments/departments";
 
 export interface IContactsState  {
   contactList:Contact[];
   activeContact:Contact;
  selectedList:Contact[];
-  edit:boolean;
-  add:boolean;
-  filter:string;
+  filter:Department;
+  formType:FormTypes;
 }

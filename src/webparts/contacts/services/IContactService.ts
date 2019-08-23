@@ -6,7 +6,7 @@ export interface IContactService{
      * getContacts
      * Returns list items json format promise
      */
-     getContacts():Promise<any>;
+     getContacts():Promise<Contact[]>;
     
      addContact(contact:Contact):Promise<ItemAddResult>
 

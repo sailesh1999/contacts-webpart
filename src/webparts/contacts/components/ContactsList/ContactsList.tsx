@@ -5,7 +5,6 @@ import { Contact } from "../../../../Models/Contact";
 interface IContactsListProps{
    selectedList:Contact[];
    setActiveContact:((contact:Contact)=>Contact);
-   activeContact:Contact;
 }
 
 export default class ContactsList extends React.Component<IContactsListProps,{}>{

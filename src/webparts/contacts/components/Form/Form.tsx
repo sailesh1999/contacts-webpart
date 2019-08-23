@@ -1,87 +1,99 @@
 import * as React from "react";
 
-import {IFormProps} from './IFormProps';
-import {Contact} from '../../../../Models/Contact';
+import { IFormProps } from './IFormProps';
+import { Contact } from '../../../../Models/Contact';
 import { Department } from "../../departments/departments";
+import { FormTypes } from "./FormTypes";
 
-export default class Form extends React.Component<IFormProps,{}>{
-    form:any;
-    inputContact:Contact=new Contact();//{id:0,name:'',num:'',department:''};
-    public constructor(props){
-        super(props);
-        this.state={inputContact:Contact};
+interface IFormState {
+  inputContact: Contact;
+}
 
-        this.addFormDOM=this.addFormDOM.bind(this);
+export default class Form extends React.Component<IFormProps, IFormState>{
+  form;
+  formType: FormTypes;
+  inputContact: Contact = new Contact();
+  public constructor(props) {
+    super(props);
+    this.state = { inputContact: this.props.activeContact };
+    this.formDOM = this.formDOM.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.sendData = this.sendData.bind(this);
+  }
 
+  public componentWillReceiveProps() {
+    this.setState({ inputContact: this.props.activeContact }, () => { console.log(this.state.inputContact) })
+  }
 
-    }
+  public handleChange(e) {
+    let contact: Contact = new Contact(this.state.inputContact)
+    contact[e.target.name] = e.target.value;
+    console.log(this.state.inputContact)
+    this.setState({ inputContact: contact })
+  }
 
-    public addFormDOM(){
-      if (this.props.add) {
-        this.form = <div>
-          <h3>Addcontact:</h3>
-          name:<input type="text" onChange={(e) =>  this.inputContact.name= e.target.value }></input>
-          number:<input type="text" onChange={(e) => this.inputContact.num= e.target.value}></input>
-          department:
-       <select onChange={(e) => this.inputContact.department= e.target.value}>
-            <option value="NotSpecified">Select</option>
-            <option value={Department.IT}>IT</option>
-            <option value={Department.Sales}>Sales</option>
-          </select>
-          <button onClick={(e)=>this.props.deactivateAddForm()}> Cancel</button>
-          <button onClick={(e)=>this.props.addContact(this.inputContact)}> Done</button>
-  
+  public sendData() {
+    if (this.props.formType == FormTypes.Edit) {
+      return (
+        <div>
+          <button onClick={(e) => {
+            this.props.setFormType(FormTypes.None);
+            this.props.editContact(this.state.inputContact);
+          }}
+          >Edit</button>
+          <button onClick={(e) => {
+            this.props.setFormType(FormTypes.None);
+          }}> Cancel</button>
         </div>
-  
-      }
-      else if(this.props.edit){
-        this.form=    <div>
-        <h3>Edit selected contact:</h3>
-        name:<input type="text" value={this.props.activeContact.name} onChange={
-                                          (e)=> 
-                                          {
-                                          this.props.activeContact.name=e.target.value;
-                                          this.forceUpdate();
-                                          }
-                                          } >
-  
-                                          </input>
-        number:<input type="text" value={this.props.activeContact.num} onChange={ (e)=> 
-                                          {
-                                          this.props.activeContact.num=e.target.value;
-                                          this.forceUpdate();
-  
-                                          }
-                                          }></input>
-        
-        <select value={this.props.activeContact.department} onChange={(e)=>{this.props.activeContact.department=e.target.value;this.forceUpdate()}}>
-            <option value="NotSpecified">Select</option>
-            <option value={Department.IT}>IT</option>
-            <option value={Department.Sales}>Sales</option>
+      )
+    }
+    else {
+      return (
+        <div>
+          <button onClick={(e) => {
+            this.props.addContact(this.state.inputContact);
+            this.props.setFormType(FormTypes.None);
+          }}> Add</button>
+          <button onClick={(e) => {
+            this.props.setFormType(FormTypes.None);
+          }}> Cancel</button>
+        </div>
+      )
+    }
+  }
+
+  public formDOM() {
+    if (this.props.formType == FormTypes.None) {
+      this.form = null;
+    }
+    else {
+      this.form = <div>
+        <h3>{FormTypes[this.props.formType]} contact:</h3>
+        name:<input type="text" name="name" value={this.state.inputContact.name} onChange={
+          (e) => this.handleChange(e)
+        } >
+
+        </input>
+        number:<input type="text" name="num" value={this.state.inputContact.num} onChange={
+          (e) => this.handleChange(e)
+        }></input>
+
+        <select value={this.state.inputContact.department} name="department" onChange={(e) => this.handleChange(e)}>
+          <option value="NotSpecified">Select</option>
+          <option value={Department.IT}>IT</option>
+          <option value={Department.Sales}>Sales</option>
         </select>
 
-          <button onClick={(e)=>
-            {
-                this.props.editContact(this.props.activeContact);
-                this.props.deactivateEditForm();
-                this.forceUpdate();
-            }}
-            >Done</button>
-        </div>
-      }
-      else {
-        this.form = null;
-      }
-
+        {this.sendData()}
+      </div>
     }
+  }
 
-    public render():React.ReactElement<IFormProps>{
-      { this.addFormDOM()}
-      return(this.form);
+  public render(): React.ReactElement<IFormState> {
+    { this.formDOM() }
+    return (this.form);
+  }
 
 
-    }
-
-    
 }
 
