@@ -7,8 +7,8 @@ import { Department } from "../../departments/departments";
 interface IContactsListProps {
     contactList: Contact[];
     setActiveContact: ((contact: Contact) => Contact);
-    setFormType:((formType:FormTypes)=>void);
-    filter:Department;
+    setFormType: ((formType: FormTypes) => void);
+    filter: Department;
 }
 
 export default class ContactsList extends React.Component<IContactsListProps, {}>{
@@ -17,13 +17,12 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
     public constructor(props: IContactsListProps) {
         super(props);
         this.generateContactsListDOM = this.generateContactsListDOM.bind(this);
-        this.filterList=this.filterList.bind(this);
-
+        this.filterList = this.filterList.bind(this);
         this.generateContactsListDOM();
 
     }
 
-    public filterList(){
+    public filterList() {
         if (this.props.filter == Department.All) {
             this.selectedList = this.props.contactList
         }
@@ -58,18 +57,13 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
                             }   >
                                 <h1 className={styles["list-contact-name"]}>{contact.name}</h1>
                             </li>
-
-                        
-                            
                     )}
-
                 </ul>
             </div>)
         }
     }
 
     public render(): React.ReactElement<{}> {
-        
         return (this.generateContactsListDOM());
     }
 }

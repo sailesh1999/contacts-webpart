@@ -5,7 +5,7 @@ export class Contact {
     department: string = "";
     address:string="";
     gender:string="Male";
-    birthdate:string;
+    birthdate:string="";
     constructor(args?) {
         if (args != undefined) {
             this.id = args.id;

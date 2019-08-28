@@ -20,8 +20,7 @@ export default class Header extends React.Component<IHeaderDetailProps, {}>{
 
   public changeFilter(e) {
     this.props.setActiveContact(new Contact());
-    this.props.setFilter(e.target.value);
-   
+    this.props.setFilter(e.target.value);   
   }
 
   public render(): React.ReactElement<{}> {

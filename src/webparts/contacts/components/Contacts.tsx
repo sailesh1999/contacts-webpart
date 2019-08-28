@@ -13,16 +13,12 @@ import { Contact } from '../../../Models/Contact';
 import { SPHttpClient } from '@microsoft/sp-http';
 import { Department } from '../departments/departments';
 
-interface IContactsProps {
-  spHttpClient: SPHttpClient;
-  currentWebUrl: string;
-}
 
-export default class Contacts extends React.Component<IContactsProps, IContactsState> {
+export default class Contacts extends React.Component<{}, IContactsState> {
   private service: ContactService;
   contactList: Contact[] = [];
 
-  public constructor(props:IContactsProps) {
+  public constructor(props) {
     super(props);
     this.service = new ContactService();
     this.state = {
@@ -46,7 +42,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.service.getContacts()
       .then((ListItems: Contact[]) => {
         ListItems.map((list) => {
-          let cont = new Contact({ id: list['ID'], name: list['Title'], num: list['num'], department: list['department'],address:list['Address'],gender:list['gender'],birthdate:this.convertSPDate(list['birthdate']) })
+          let cont = new Contact({ id: list['ID'], name: list['Title'], num: list['num'], department: list['department'], address: list['Address'], gender: list['gender'], birthdate: this.convertSPDate(list['birthdate']) })
           this.contactList.push(cont);
         })
         this.setState({ contactList: this.contactList })
@@ -55,11 +51,11 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
   }
 
   public convertSPDate(d) {
-        if(d==null)
-        return d;
-        var xDate = d.split("T")[0];
-        return xDate;       
-    }
+    if (d == null)
+      return d;
+    var xDate = d.split("T")[0];
+    return xDate;
+  }
 
 
   public setFilter(filter: Department) {
@@ -70,7 +66,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.setState({ contactList: contactList });
   }
 
-  
+
   public setActiveContact(contact: Contact): Contact {
     this.setState({ activeContact: contact });
     return this.state.activeContact;
@@ -94,7 +90,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.service.addContact(contact)
       .then((e) => {
         let contactListCopy = this.state.contactList.slice();
-        contactListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department,address:contact.address,gender:contact.gender,birthdate:contact.birthdate });
+        contactListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department, address: contact.address, gender: contact.gender, birthdate: contact.birthdate });
         this.setState({ contactList: contactListCopy })
       })
   }
@@ -151,7 +147,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     }
   }
 
-  
+
   public render(): React.ReactElement<IContactsState> {
     return (
       <div className={styles.contact}>
@@ -178,9 +174,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
           formType={this.state.formType}
           setFormType={this.setFormType}
         />
-
-        <br></br>
-
+        <br />
       </div>
     )
   }
