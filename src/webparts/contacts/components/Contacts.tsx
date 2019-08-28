@@ -45,10 +45,12 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
   }
 
   public componentDidMount() {
+    console.log(new Date().toLocaleDateString())
     this.service.getContacts()
       .then((ListItems: Contact[]) => {
+        console.log(ListItems)
         ListItems.map((list) => {
-          let cont = new Contact({ id: list['ID'], name: list['Title'], num: list['num'], department: list['department'],address:list['Address'],gender:list['gender'] })
+          let cont = new Contact({ id: list['ID'], name: list['Title'], num: list['num'], department: list['department'],address:list['Address'],gender:list['gender'],birthdate:this.convertSPDate(list['birthdate']) })
           this.contactList.push(cont);
         })
         this.setState({ contactList: this.contactList })
@@ -56,6 +58,14 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.setState({ selectedList: this.contactList })
     console.log("Contacts loaded");
   }
+
+  public convertSPDate(d) {
+        if(d==null)
+        return d;
+        var xDate = d.split("T")[0];
+        return xDate;       
+    }
+
 
   public setFilter(filter: Department) {
     this.setState({ filter: filter });
@@ -92,10 +102,10 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.service.addContact(contact)
       .then((e) => {
         let contactListCopy = this.state.contactList.slice();
-        contactListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department,address:contact.address,gender:contact.gender });
+        contactListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department,address:contact.address,gender:contact.gender,birthdate:contact.birthdate });
         if (this.state.filter == contact.department || this.state.filter == Department.All) {
           let selectedListCopy = this.state.selectedList.slice();
-          selectedListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department,address:contact.address,gender:contact.gender });
+          selectedListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department,address:contact.address,gender:contact.gender,birthdate:contact.birthdate });
           this.setState({ selectedList: selectedListCopy })
         }
         this.setState({ contactList: contactListCopy })
@@ -163,6 +173,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     }
   }
 
+  
   public render(): React.ReactElement<IContactsState> {
     return (
       <div className={styles.contact}>

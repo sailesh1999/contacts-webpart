@@ -29,7 +29,8 @@ export default class ContactService implements IContactService {
       department: contact.department,
       num: contact.num,
       Address:contact.address,
-      gender:contact.gender
+      gender:contact.gender,
+      birthdate:contact.birthdate
     })
   }
 
@@ -40,7 +41,9 @@ export default class ContactService implements IContactService {
       department: contact.department,
       num: contact.num,
       Address:contact.address,
-      gender:contact.gender
+      gender:contact.gender,
+      birthdate:contact.birthdate
+
     })
   }
 

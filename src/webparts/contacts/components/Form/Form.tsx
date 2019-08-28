@@ -43,7 +43,6 @@ export default class Form extends React.Component<IFormProps, IFormState>{
          num:"",
          department:"",
          address:"",
-         gender:""
        }
      }
      this.setState({errors:errors})
@@ -218,6 +217,12 @@ export default class Form extends React.Component<IFormProps, IFormState>{
             <span style={{color: "red"}}>{this.state.errors["gender"]}</span>
 
           </div>
+
+          DOB:<input type="date" name="birthdate" value={this.state.inputContact.birthdate} onChange={(e)=>{
+            this.handleChange(e);
+            this.handleValidation(e);
+          }} >
+          </input>
         
         {this.sendData()}
       </div>)
