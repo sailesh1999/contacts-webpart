@@ -27,7 +27,6 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.service = new ContactService();
     this.state = {
       contactList: [],
-      selectedList: [],
       activeContact: new Contact(),
       filter: Department.All,
       formType: FormTypes.None
@@ -35,7 +34,6 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
 
     this.setActiveContact = this.setActiveContact.bind(this);
     this.addContact = this.addContact.bind(this);
-    this.setSelectedList = this.setSelectedList.bind(this);
     this.editContact = this.editContact.bind(this);
     this.deleteContact = this.deleteContact.bind(this);
     this.activeContactExist = this.activeContactExist.bind(this);
@@ -45,17 +43,14 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
   }
 
   public componentDidMount() {
-    console.log(new Date().toLocaleDateString())
     this.service.getContacts()
       .then((ListItems: Contact[]) => {
-        console.log(ListItems)
         ListItems.map((list) => {
           let cont = new Contact({ id: list['ID'], name: list['Title'], num: list['num'], department: list['department'],address:list['Address'],gender:list['gender'],birthdate:this.convertSPDate(list['birthdate']) })
           this.contactList.push(cont);
         })
         this.setState({ contactList: this.contactList })
       })
-    this.setState({ selectedList: this.contactList })
     console.log("Contacts loaded");
   }
 
@@ -75,10 +70,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.setState({ contactList: contactList });
   }
 
-  public setSelectedList(contactList: Contact[]) {
-    this.setState({ selectedList: contactList });
-  }
-
+  
   public setActiveContact(contact: Contact): Contact {
     this.setState({ activeContact: contact });
     return this.state.activeContact;
@@ -103,11 +95,6 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
       .then((e) => {
         let contactListCopy = this.state.contactList.slice();
         contactListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department,address:contact.address,gender:contact.gender,birthdate:contact.birthdate });
-        if (this.state.filter == contact.department || this.state.filter == Department.All) {
-          let selectedListCopy = this.state.selectedList.slice();
-          selectedListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department,address:contact.address,gender:contact.gender,birthdate:contact.birthdate });
-          this.setState({ selectedList: selectedListCopy })
-        }
         this.setState({ contactList: contactListCopy })
       })
   }
@@ -115,14 +102,8 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
   public editContact(contact: Contact) {
     this.service.editContact(contact)
       .then((e) => {
-        this.state.selectedList[this.state.selectedList.indexOf(this.state.activeContact)] = contact;
         this.state.contactList[this.state.contactList.indexOf(this.state.activeContact)] = contact;
         this.setActiveContact(contact);
-        if (this.state.activeContact.department != this.state.filter && this.state.filter != Department.All) {
-          let selectedListCopy = this.state.selectedList.slice();
-          selectedListCopy = selectedListCopy.filter((contact) => { return contact.department == this.state.filter });
-          this.setState({ selectedList: selectedListCopy })
-        }
       })
   }
 
@@ -132,11 +113,8 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.service.deleteContact(activeContactId)
       .then((e) => {
         let contactListCopy = this.state.contactList.slice();
-        let selectedListCopy = this.state.selectedList.slice();
         contactListCopy = contactListCopy.filter((contact) => { return contact.id != activeContactId })
-        selectedListCopy = selectedListCopy.filter((contact) => { return contact.id != activeContactId })
         this.setState({ contactList: contactListCopy });
-        this.setState({ selectedList: selectedListCopy })
         console.log("Deleted contact and updated list");
       })
   }
@@ -178,7 +156,6 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     return (
       <div className={styles.contact}>
         <Header
-          setSelectedList={this.setSelectedList}
           contactList={this.state.contactList}
           setFilter={this.setFilter}
           setActiveContact={this.setActiveContact}
@@ -187,8 +164,9 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
 
         <ContactsList
           setActiveContact={this.setActiveContact}
-          selectedList={this.state.selectedList}
+          contactList={this.state.contactList}
           setFormType={this.setFormType}
+          filter={this.state.filter}
         />
 
         {this.detailDOM()}

@@ -2,22 +2,44 @@ import * as React from "react";
 import styles from '../Contacts.module.scss';
 import { Contact } from "../../../../Models/Contact";
 import { FormTypes } from "../Form/FormTypes";
+import { Department } from "../../departments/departments";
 
 interface IContactsListProps {
-    selectedList: Contact[];
+    contactList: Contact[];
     setActiveContact: ((contact: Contact) => Contact);
-    setFormType:((formType:FormTypes)=>void)
+    setFormType:((formType:FormTypes)=>void);
+    filter:Department;
 }
 
 export default class ContactsList extends React.Component<IContactsListProps, {}>{
+    selectedList: Contact[] = []
+
     public constructor(props: IContactsListProps) {
         super(props);
         this.generateContactsListDOM = this.generateContactsListDOM.bind(this);
+        this.filterList=this.filterList.bind(this);
+
         this.generateContactsListDOM();
+
+    }
+
+    public filterList(){
+        if (this.props.filter == Department.All) {
+            this.selectedList = this.props.contactList
+        }
+        else {
+            this.selectedList = this.props.contactList.filter(
+                (contact) => {
+                    return (contact.department == this.props.filter)
+                })
+        }
+        console.log(this.selectedList)
     }
 
     public generateContactsListDOM() {
-        if (this.props.selectedList.length == 0) {
+        this.filterList();
+        console.log(this.selectedList)
+        if (this.selectedList.length == 0) {
             return (<div>
                 <small>No contacts to display. Click +Add to add a contact</small>
             </div>)
@@ -26,7 +48,8 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
             return (<div className={styles["contacts-container"]}>
                 <h3 className={styles["contacts-header"]}>CONTACTS</h3>
                 <ul className={styles["contacts-list"]}>
-                    {this.props.selectedList.map(
+
+                    {this.selectedList.map(
                         (contact, i) =>
                             <li onClick={(e) => {
                                 this.props.setFormType(FormTypes.None);
@@ -35,13 +58,18 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
                             }   >
                                 <h1 className={styles["list-contact-name"]}>{contact.name}</h1>
                             </li>
+
+                        
+                            
                     )}
+
                 </ul>
             </div>)
         }
     }
 
     public render(): React.ReactElement<{}> {
+        
         return (this.generateContactsListDOM());
     }
 }

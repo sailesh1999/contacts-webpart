@@ -5,7 +5,6 @@ import { Department } from "../../departments/departments";
 import { FormTypes } from "../Form/FormTypes";
 
 interface IHeaderDetailProps {
-  setSelectedList: ((contactList: Contact[]) => void);
   contactList: Contact[];
   setFilter: ((filter: string) => void);
   setActiveContact: ((contact: Contact) => Contact);
@@ -22,20 +21,7 @@ export default class Header extends React.Component<IHeaderDetailProps, {}>{
   public changeFilter(e) {
     this.props.setActiveContact(new Contact());
     this.props.setFilter(e.target.value);
-    this.props.setSelectedList([]);
-    this.filteredList = [];
-
-    if (e.target.value == Department.All) {
-      this.props.setSelectedList(this.props.contactList);
-    }
-    else {
-      this.props.contactList.map((contact, i) => {
-        if (contact.department == e.target.value) {
-          this.filteredList.push(contact);
-        }
-      });
-      this.props.setSelectedList(this.filteredList);
-    }
+   
   }
 
   public render(): React.ReactElement<{}> {
