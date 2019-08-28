@@ -48,7 +48,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
     this.service.getContacts()
       .then((ListItems: Contact[]) => {
         ListItems.map((list) => {
-          let cont = new Contact({ id: list['ID'], name: list['Title'], num: list['num'], department: list['department'] })
+          let cont = new Contact({ id: list['ID'], name: list['Title'], num: list['num'], department: list['department'],address:list['Address'],gender:list['gender'] })
           this.contactList.push(cont);
         })
         this.setState({ contactList: this.contactList })
@@ -81,20 +81,21 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
   }
 
   public addContact(contact: Contact) {
-    this.setActiveContact({ id: -1, name: '', num: '', department: '' });
+    this.setActiveContact(new Contact());
     if (this.state.contactList.length != 0) {
       contact.id = this.state.contactList[this.state.contactList.length - 1].id + 1
     }
     else {
       contact.id = 0;
     }
+    console.log(contact)
     this.service.addContact(contact)
       .then((e) => {
         let contactListCopy = this.state.contactList.slice();
-        contactListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department });
+        contactListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department,address:contact.address,gender:contact.gender });
         if (this.state.filter == contact.department || this.state.filter == Department.All) {
           let selectedListCopy = this.state.selectedList.slice();
-          selectedListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department });
+          selectedListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department,address:contact.address,gender:contact.gender });
           this.setState({ selectedList: selectedListCopy })
         }
         this.setState({ contactList: contactListCopy })
@@ -117,7 +118,7 @@ export default class Contacts extends React.Component<IContactsProps, IContactsS
 
   public deleteContact(activeContactId: number) {
     this.setFormType(FormTypes.None);
-    this.setActiveContact({ id: -1, name: '', num: '', department: '' });
+    this.setActiveContact(new Contact());
     this.service.deleteContact(activeContactId)
       .then((e) => {
         let contactListCopy = this.state.contactList.slice();

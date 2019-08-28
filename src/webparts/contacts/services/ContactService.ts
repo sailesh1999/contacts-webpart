@@ -27,7 +27,9 @@ export default class ContactService implements IContactService {
       Id: contact.id,
       Title: contact.name,
       department: contact.department,
-      num: contact.num
+      num: contact.num,
+      Address:contact.address,
+      gender:contact.gender
     })
   }
 
@@ -36,7 +38,9 @@ export default class ContactService implements IContactService {
     return this.getList().items.getById(contact.id).update({
       Title: contact.name,
       department: contact.department,
-      num: contact.num
+      num: contact.num,
+      Address:contact.address,
+      gender:contact.gender
     })
   }
 
