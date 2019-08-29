@@ -19,7 +19,6 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
         this.generateContactsListDOM = this.generateContactsListDOM.bind(this);
         this.filterList = this.filterList.bind(this);
         this.generateContactsListDOM();
-
     }
 
     public filterList() {

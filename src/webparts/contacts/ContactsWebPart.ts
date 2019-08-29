@@ -17,7 +17,6 @@ export interface IContactsWebPartProps {
 export default class ContactsWebPart extends BaseClientSideWebPart<IContactsWebPartProps> {
 
   public render(): void {
-
     ReactDom.render(React.createElement(Contacts), this.domElement);
   }
 

@@ -1,5 +1,4 @@
 import { Contact } from './../../../Models/Contact';
-import { SPHttpClient } from "@microsoft/sp-http";
 import { sp, List, ItemAddResult, ItemUpdateResult } from "@pnp/sp";
 import { IContactService } from './IContactService';
 import ContactConverter from '../../../Converter/ContactConverter'

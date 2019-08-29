@@ -13,10 +13,9 @@ import { Contact } from '../../../Models/Contact';
 import { Department } from '../departments/departments';
 import ContactConverter from '../../../Converter/ContactConverter';
 
-
 export default class Contacts extends React.Component<{}, IContactsState> {
   private service: ContactService;
-  converter:ContactConverter=new ContactConverter();
+  converter: ContactConverter = new ContactConverter();
   contactList: Contact[] = [];
 
   public constructor(props) {
@@ -59,7 +58,6 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     this.setState({ contactList: contactList });
   }
 
-
   public setActiveContact(contact: Contact): Contact {
     this.setState({ activeContact: contact });
     return this.state.activeContact;
@@ -74,7 +72,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
   public addContact(contact: Contact) {
     this.setActiveContact(new Contact());
     if (this.state.contactList.length != 0) {
-      contact.id = this.state.contactList[this.state.contactList.length - 1].id + 1
+      contact.id = this.state.contactList[this.state.contactList.length - 1].id + 1;
     }
     else {
       contact.id = 0;

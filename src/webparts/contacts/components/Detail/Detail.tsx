@@ -13,7 +13,6 @@ export default class Detail extends React.Component<IDetailProps, {}>
     }
 
     public render(): React.ReactElement<{}> {
-
         return (
             <div>
                 <h1 className={styles["detail-name"]}>Name: {this.props.activeContact.name}</h1>
