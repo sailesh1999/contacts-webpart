@@ -42,9 +42,10 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     this.service.getContacts()
       .then((ListItems: any[]) => {
         ListItems.map((list) => {
+          console.log(list)
           let cont = this.converter.spContactToContact(list)
           this.contactList.push(cont);
-          
+          console.log(cont)
         })
         this.setState({ contactList: this.contactList })
       })

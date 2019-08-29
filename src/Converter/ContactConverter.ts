@@ -4,7 +4,6 @@ export default class ContactConverter
 {
    
     public contactToSPContact(contact:Contact){
-        console.log(contact.birthdate)
         return({
             Id: contact.id,
             Title: contact.name,
@@ -17,7 +16,10 @@ export default class ContactConverter
                 Description:'',
                 Url:contact.picture
             },
-            personId:contact.userId
+            personId:contact.userId,
+            // relation:{results:[
+            //     true,false
+            // ]}
         })
     }
 
@@ -31,7 +33,8 @@ export default class ContactConverter
             gender: SPListItem['gender'], 
             birthdate: this.spDateToJSDate(SPListItem['birthdate']) ,
             picture:SPListItem['photo']?SPListItem['photo'].Url:null,
-            userId:SPListItem['personId']
+            userId:SPListItem['personId'],
+            relation:SPListItem['relation'].slice()
         })
         return(c)
     }

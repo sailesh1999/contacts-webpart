@@ -65,6 +65,22 @@ export default class Form extends React.Component<IFormProps, IFormState>{
     this.setState({ inputContact: contact })
   }
 
+  public handleCheckBox(e){
+    let fieldName=e.target.name;
+    let fieldValue=e.target.value;
+    let checked=e.target.checked;
+    let contact: Contact = new Contact(this.state.inputContact)
+
+    if(checked){
+      contact[fieldName].push(fieldValue)
+    }
+    else{
+      contact[fieldName].splice(contact[fieldName].indexOf(fieldValue),1);
+    }
+    console.log(contact)
+    this.setState({ inputContact: contact })
+  }
+
   public isFormValid(errors){
     for (let error in errors){
       if(errors[error]==true){
@@ -226,6 +242,20 @@ export default class Form extends React.Component<IFormProps, IFormState>{
             this.handleValidation(e);
           }} >
           </input>
+
+          Relation:
+          <div>
+          Friend: <input type="checkbox" value="Friend" name="relation" checked={this.state.inputContact.relation.indexOf("Friend")>-1} onChange={(e)=>{
+            this.handleCheckBox(e);
+          }}>
+          </input>
+
+          Colleague: <input type="checkbox" value="Colleague" name="relation" checked={this.state.inputContact.relation.indexOf("Colleague")>-1} onChange={(e)=>{
+            this.handleCheckBox(e);
+          }}>
+          </input>  
+          </div>
+       
         {this.sendData()}
       </div>)
     }

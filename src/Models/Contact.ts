@@ -8,6 +8,7 @@ export class Contact {
     birthdate:string=null;
     picture:string=null;
     userId:number=null;
+    relation=[];
     constructor(args?) {
         if (args != undefined) {
             this.id = args.id;
@@ -19,6 +20,7 @@ export class Contact {
             this.birthdate=args.birthdate;
             this.picture=args.picture;
             this.userId=args.userId;
+            this.relation=args.relation;
         }
     }
 }

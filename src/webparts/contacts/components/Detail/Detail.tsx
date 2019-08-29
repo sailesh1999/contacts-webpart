@@ -22,6 +22,7 @@ export default class Detail extends React.Component<IDetailProps, {}>
                 <p>Gender:{this.props.activeContact.gender}</p>
                 <p>DOB:{this.props.activeContact.birthdate}</p>
                 <pre>Address:{this.props.activeContact.address}</pre>
+                <p>Relation:{this.props.activeContact.relation.join()}</p>
                 </div>
 
                 <div>
