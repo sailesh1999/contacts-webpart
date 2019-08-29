@@ -51,14 +51,6 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     console.log("Contacts loaded");
   }
 
-  public convertSPDate(d) {
-    if (d == null)
-      return d;
-    var xDate = d.split("T")[0];
-    return xDate;
-  }
-
-
   public setFilter(filter: Department) {
     this.setState({ filter: filter });
   }
