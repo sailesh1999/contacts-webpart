@@ -1,12 +1,8 @@
 import { Contact } from "../Models/Contact";
-import ContactService from "../webparts/contacts/services/ContactService";
 
 export default class ContactConverter
 {
-    service:ContactService;
-    constructor(service){
-        this.service=service
-    }
+   
     public contactToSPContact(contact:Contact){
         console.log(contact.birthdate)
         return({

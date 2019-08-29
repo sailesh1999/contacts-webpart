@@ -15,7 +15,7 @@ import ContactConverter from '../../../Converter/ContactConverter';
 
 export default class Contacts extends React.Component<{}, IContactsState> {
   private service: ContactService;
-  converter: ContactConverter = new ContactConverter(this.service);
+  converter: ContactConverter = new ContactConverter();
   contactList: Contact[] = [];
 
   public constructor(props) {

@@ -4,7 +4,7 @@ import { IContactService } from './IContactService';
 import ContactConverter from '../../../Converter/ContactConverter'
 
 export default class ContactService implements IContactService {
-  converter:ContactConverter=new ContactConverter(this); 
+  converter:ContactConverter=new ContactConverter(); 
   public constructor() {
     //this.converter== new ContactConverter();
   }
