@@ -65,6 +65,16 @@ export default class Form extends React.Component<IFormProps, IFormState>{
     this.setState({ inputContact: contact })
   }
 
+  // public handleChange(e) {
+  //   let contact: Contact = new Contact(this.state.inputContact)
+  //   contact[e.target.name] = e.target.value;
+  //   this.setState({ 
+  //     inputContact:{
+  //     ...this.state.inputContact,[e.target.name]:[e.target.value]
+  //     }
+  //   })
+  // }
+
   public handleCheckBox(e){
     let fieldName=e.target.name;
     let fieldValue=e.target.value;
@@ -176,7 +186,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
       return (<div>
         <h3>{FormTypes[this.props.formType]} contact:</h3>
         <div>
-        name:<input className="" type="text" name="name" value={this.state.inputContact.name} onChange={
+        name:<input className="required" type="text" name="name" value={this.state.inputContact.name} onChange={
           (e) => {
             this.handleChange(e);
             this.handleValidation(e);
@@ -188,7 +198,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
         </div>
         
         <div>
-        number:<input className=" number" type="text" name="num" value={this.state.inputContact.num} onChange={
+        number:<input className="required number" type="text" name="num" value={this.state.inputContact.num} onChange={
           (e) => {
             this.handleChange(e);
             this.handleValidation(e)
@@ -200,7 +210,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
           </div>
 
           <div>
-          Department:<select className="" value={this.state.inputContact.department} name="department" onChange={(e) => {
+          Department:<select className="required" value={this.state.inputContact.department} name="department" onChange={(e) => {
             this.handleChange(e);
             this.handleValidation(e);
           }}>
@@ -212,7 +222,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
           </div>
 
           <div>
-            Address:<textarea className="" value={this.state.inputContact.address} name="address" rows={3} onChange={(e)=>{
+            Address:<textarea className="required" value={this.state.inputContact.address} name="address" rows={3} onChange={(e)=>{
               this.handleChange(e);
               this.handleValidation(e);
             }}></textarea>
