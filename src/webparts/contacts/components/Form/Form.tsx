@@ -13,6 +13,12 @@ interface IFormState {
 export default class Form extends React.Component<IFormProps, IFormState>{
   formType: FormTypes;
   inputContact: Contact = new Contact();
+  errorList={
+    name:"Field shouldn't be empty",
+    num:"Field shouldn't be empty. Accepted input is numbers only",
+    department:"Department should be selected",
+    address:"Address shouldn't be empty"
+  }
   public constructor(props: IFormProps) {
     super(props);
     this.state = { inputContact: this.props.activeContact ,errors:{}};
@@ -31,18 +37,18 @@ export default class Form extends React.Component<IFormProps, IFormState>{
       let errors
       if(this.props.formType==FormTypes.Add){
         errors={
-         name:"Field shouldn't be empty",
-         num:"Field shouldn't be empty. Accepted input is numbers only",
-         department:"Department should be selected",
-         address:"Address shouldn't be empty"
+         name:true,
+         num:true,
+         department:true,
+         address:true
        }
      }
      else{
         errors={
-         name:"",
-         num:"",
-         department:"",
-         address:"",
+         name:false,
+         num:false,
+         department:false,
+         address:false,
        }
      }
      this.setState({errors:errors})
@@ -61,7 +67,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
 
   public isFormValid(errors){
     for (let error in errors){
-      if(errors[error]!=""){
+      if(errors[error]==true){
         return false;
       }
     }
@@ -72,44 +78,37 @@ export default class Form extends React.Component<IFormProps, IFormState>{
     let errors=this.state.errors;
     let fieldName=e.target.name;
     let fieldValue=e.target.value;
-    if(fieldName=="name"){
+    let classNames=e.target.className.split(" ");
+    errors[fieldName]=false;
+
+    if(classNames.indexOf("required")>-1){
       if(fieldValue==""){
-        errors[fieldName]="Field shouldn't be empty";
+        errors[fieldName]=errors[fieldName]||true;
       }
       else{
-        errors[fieldName]="";
+        errors[fieldName]=errors[fieldName]||false;
       }
     }
     
-    if(fieldName=="num"){
-      if(isNaN(fieldValue) || fieldValue==""){
-        errors[fieldName]="Field shouldn't be empty. Accepted input is numbers only";
+    if(classNames.indexOf("number")>-1){
+      if(isNaN(fieldValue)){
+        errors[fieldName]=errors[fieldName]||true;
       }
       else{
-        errors[fieldName]="";
+        errors[fieldName]=errors[fieldName]||false;
       }
-    }
+    }  
 
-    if(fieldName=="department"){
-      if(fieldValue==""){
-        errors[fieldName]="Department should be selected";
-      }
-      else{
-        errors[fieldName]="";
-      }
-    }
-
-    if(fieldName=="address"){
-      if(fieldValue==""){
-        errors[fieldName]="Address shouldn't be empty";
-      }
-      else{
-        errors[fieldName]="";
-      }
-    }
-    
     this.setState({errors:errors})
+    console.log(errors)
 
+  }
+
+  public getErrorDialog(name){
+    if(this.state.errors[name]){
+      return(this.errorList[name])
+    }
+    return "";
   }
 
   public sendData() {
@@ -161,31 +160,31 @@ export default class Form extends React.Component<IFormProps, IFormState>{
       return (<div>
         <h3>{FormTypes[this.props.formType]} contact:</h3>
         <div>
-        name:<input type="text" name="name" value={this.state.inputContact.name} onChange={
+        name:<input className="" type="text" name="name" value={this.state.inputContact.name} onChange={
           (e) => {
             this.handleChange(e);
             this.handleValidation(e);
           }
         } >
         </input>
-        <span style={{color: "red"}}>{this.state.errors["name"]}</span>
+        <span style={{color: "red"}}>{this.getErrorDialog("name")}</span>
 
         </div>
         
         <div>
-        number:<input type="text" name="num" value={this.state.inputContact.num} onChange={
+        number:<input className=" number" type="text" name="num" value={this.state.inputContact.num} onChange={
           (e) => {
             this.handleChange(e);
             this.handleValidation(e)
           }
 
         }></input>
-        <span style={{color: "red"}}>{this.state.errors["num"]}</span>
+        <span style={{color: "red"}}>{this.getErrorDialog("num")}</span>
 
           </div>
 
           <div>
-          Department:<select value={this.state.inputContact.department} name="department" onChange={(e) => {
+          Department:<select className="" value={this.state.inputContact.department} name="department" onChange={(e) => {
             this.handleChange(e);
             this.handleValidation(e);
           }}>
@@ -193,15 +192,15 @@ export default class Form extends React.Component<IFormProps, IFormState>{
           <option value={Department.IT}>IT</option>
           <option value={Department.Sales}>Sales</option>
         </select>
-          <span style={{color: "red"}}>{this.state.errors["department"]}</span>
+        <span style={{color: "red"}}>{this.getErrorDialog("department")}</span>
           </div>
 
           <div>
-            Address:<textarea value={this.state.inputContact.address} name="address" rows={3} onChange={(e)=>{
+            Address:<textarea className="" value={this.state.inputContact.address} name="address" rows={3} onChange={(e)=>{
               this.handleChange(e);
               this.handleValidation(e);
             }}></textarea>
-                    <span style={{color: "red"}}>{this.state.errors["address"]}</span>
+        <span style={{color: "red"}}>{this.getErrorDialog("address")}</span>
           </div>
           
           Gender:<div>
@@ -212,18 +211,21 @@ export default class Form extends React.Component<IFormProps, IFormState>{
 
             Female:<input type="radio" name="gender" value="Female" checked={this.state.inputContact.gender=="Female"} onChange={(e)=>{
               this.handleChange(e);
-              this.handleValidation(e);
             }}></input>
-            <span style={{color: "red"}}>{this.state.errors["gender"]}</span>
+        <span style={{color: "red"}}>{this.getErrorDialog("gender")}</span>
 
           </div>
 
           DOB:<input type="date" name="birthdate" value={this.state.inputContact.birthdate} onChange={(e)=>{
             this.handleChange(e);
-            this.handleValidation(e);
           }} >
           </input>
         
+          Picture(URL):<input type="text" name="picture" value={this.state.inputContact.picture} onChange={(e)=>{
+            this.handleChange(e);
+            this.handleValidation(e);
+          }} >
+          </input>
         {this.sendData()}
       </div>)
     }

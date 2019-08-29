@@ -15,7 +15,7 @@ import ContactConverter from '../../../Converter/ContactConverter';
 
 export default class Contacts extends React.Component<{}, IContactsState> {
   private service: ContactService;
-  converter: ContactConverter = new ContactConverter();
+  converter: ContactConverter = new ContactConverter(this.service);
   contactList: Contact[] = [];
 
   public constructor(props) {
@@ -44,6 +44,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
         ListItems.map((list) => {
           let cont = this.converter.spContactToContact(list)
           this.contactList.push(cont);
+          
         })
         this.setState({ contactList: this.contactList })
       })

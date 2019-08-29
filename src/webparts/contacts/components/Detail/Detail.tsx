@@ -15,12 +15,19 @@ export default class Detail extends React.Component<IDetailProps, {}>
     public render(): React.ReactElement<{}> {
         return (
             <div>
+                <div>
                 <h1 className={styles["detail-name"]}>Name: {this.props.activeContact.name}</h1>
                 <h1 className={styles["detail-value"]}>Number: {this.props.activeContact.num}</h1>
                 <h1 className={styles["detail-value"]}>Department: {this.props.activeContact.department}</h1>
                 <p>Gender:{this.props.activeContact.gender}</p>
                 <p>DOB:{this.props.activeContact.birthdate}</p>
                 <pre>Address:{this.props.activeContact.address}</pre>
+                </div>
+
+                <div>
+                    <img src={this.props.activeContact.picture} height="42" width="42" alt="No Profile photo"></img>
+                </div>
+                
             </div>
         )
     }

@@ -4,7 +4,7 @@ import { IContactService } from './IContactService';
 import ContactConverter from '../../../Converter/ContactConverter'
 
 export default class ContactService implements IContactService {
-  converter:ContactConverter=new ContactConverter(); 
+  converter:ContactConverter=new ContactConverter(this); 
   public constructor() {
     //this.converter== new ContactConverter();
   }
@@ -33,5 +33,15 @@ export default class ContactService implements IContactService {
   //Delete list item using pnpjs
   public deleteContact(activeContactId: number): Promise<void> {
     return this.getList().items.getById(activeContactId).delete()
+  }
+
+  public getUser(userId:number){
+    if(userId==null)
+    return null
+    let user;
+    return sp.web.siteUsers.getById(userId).get()
+    .then((result)=>{
+      return result;
+    })
   }
 }

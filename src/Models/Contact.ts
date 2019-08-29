@@ -6,6 +6,8 @@ export class Contact {
     address:string="";
     gender:string="Male";
     birthdate:string=null;
+    picture:string=null;
+    userId:number=null;
     constructor(args?) {
         if (args != undefined) {
             this.id = args.id;
@@ -15,6 +17,8 @@ export class Contact {
             this.address=args.address;
             this.gender=args.gender;
             this.birthdate=args.birthdate;
+            this.picture=args.picture;
+            this.userId=args.userId;
         }
     }
 }
