@@ -2,14 +2,12 @@ import { Contact } from './../../../Models/Contact';
 import { SPHttpClient } from "@microsoft/sp-http";
 import { sp, List, ItemAddResult, ItemUpdateResult } from "@pnp/sp";
 import { IContactService } from './IContactService';
-
+import ContactConverter from '../../../Converter/ContactConverter'
 
 export default class ContactService implements IContactService {
-  private spHttpClient: SPHttpClient;
-  private currentWebUrl: string;
-
+  converter:ContactConverter=new ContactConverter(); 
   public constructor() {
-    
+    //this.converter== new ContactConverter();
   }
 
   public getList(): List {
@@ -17,34 +15,20 @@ export default class ContactService implements IContactService {
   }
 
   // Get using pnp js
-  public getContacts(): Promise<Contact[]> {
+  public getContacts(): Promise<any[]> {
     return this.getList().items.get()
   }
 
   //Add list item using pnpjs 
   public addContact(contact: Contact): Promise<ItemAddResult> {
-    return this.getList().items.add({
-      Id: contact.id,
-      Title: contact.name,
-      department: contact.department,
-      num: contact.num,
-      Address:contact.address,
-      gender:contact.gender,
-      birthdate:contact.birthdate
-    })
+    let spContact=this.converter.contactToSPContact(contact);
+    return this.getList().items.add(spContact)
   }
 
   //Update list item using pnpjs
   public editContact(contact: Contact): Promise<ItemUpdateResult> {
-    return this.getList().items.getById(contact.id).update({
-      Title: contact.name,
-      department: contact.department,
-      num: contact.num,
-      Address:contact.address,
-      gender:contact.gender,
-      birthdate:contact.birthdate
-
-    })
+    let spContact=this.converter.contactToSPContact(contact)
+    return this.getList().items.getById(contact.id).update(spContact)
   }
 
   //Delete list item using pnpjs

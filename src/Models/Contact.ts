@@ -5,7 +5,7 @@ export class Contact {
     department: string = "";
     address:string="";
     gender:string="Male";
-    birthdate:string="";
+    birthdate:string=null;
     constructor(args?) {
         if (args != undefined) {
             this.id = args.id;
@@ -16,6 +16,5 @@ export class Contact {
             this.gender=args.gender;
             this.birthdate=args.birthdate;
         }
-
     }
 }

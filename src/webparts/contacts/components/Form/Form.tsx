@@ -7,7 +7,7 @@ import { FormTypes } from "./FormTypes";
 
 interface IFormState {
   inputContact: Contact;
-  errors:any;
+  errors:{};
 }
 
 export default class Form extends React.Component<IFormProps, IFormState>{

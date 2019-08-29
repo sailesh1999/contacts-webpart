@@ -10,12 +10,13 @@ import Detail from './Detail/Detail';
 import Header from './Header/Header';
 import ContactsList from './ContactsList/ContactsList';
 import { Contact } from '../../../Models/Contact';
-import { SPHttpClient } from '@microsoft/sp-http';
 import { Department } from '../departments/departments';
+import ContactConverter from '../../../Converter/ContactConverter';
 
 
 export default class Contacts extends React.Component<{}, IContactsState> {
   private service: ContactService;
+  converter:ContactConverter=new ContactConverter();
   contactList: Contact[] = [];
 
   public constructor(props) {
@@ -40,9 +41,9 @@ export default class Contacts extends React.Component<{}, IContactsState> {
 
   public componentDidMount() {
     this.service.getContacts()
-      .then((ListItems: Contact[]) => {
+      .then((ListItems: any[]) => {
         ListItems.map((list) => {
-          let cont = new Contact({ id: list['ID'], name: list['Title'], num: list['num'], department: list['department'], address: list['Address'], gender: list['gender'], birthdate: this.convertSPDate(list['birthdate']) })
+          let cont = this.converter.spContactToContact(list)
           this.contactList.push(cont);
         })
         this.setState({ contactList: this.contactList })
@@ -90,7 +91,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     this.service.addContact(contact)
       .then((e) => {
         let contactListCopy = this.state.contactList.slice();
-        contactListCopy.push({ id: contact.id, name: contact.name, num: contact.num, department: contact.department, address: contact.address, gender: contact.gender, birthdate: contact.birthdate });
+        contactListCopy.push(new Contact(contact));
         this.setState({ contactList: contactListCopy })
       })
   }

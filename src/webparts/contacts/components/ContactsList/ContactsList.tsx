@@ -32,12 +32,10 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
                     return (contact.department == this.props.filter)
                 })
         }
-        console.log(this.selectedList)
     }
 
     public generateContactsListDOM() {
         this.filterList();
-        console.log(this.selectedList)
         if (this.selectedList.length == 0) {
             return (<div>
                 <small>No contacts to display. Click +Add to add a contact</small>
