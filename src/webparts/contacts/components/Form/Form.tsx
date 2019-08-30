@@ -9,7 +9,7 @@ import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { Dropdown, DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
 import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { DatePicker, DayOfWeek, IDatePickerStrings } from 'office-ui-fabric-react';
+import { DatePicker, DayOfWeek, IDatePickerStrings, DefaultButton } from 'office-ui-fabric-react';
 
 
 
@@ -205,11 +205,12 @@ export default class Form extends React.Component<IFormProps, IFormState>{
       if (this.props.formType == FormTypes.Edit) {
         
           actionDOM=<div>
-            <button onClick={(e) => {
+            <DefaultButton onClick={(e) => {
               this.props.setFormType(FormTypes.None);
               this.props.editContact(this.state.inputContact);
+              this.props.setContactListVisibility(true);
             }}
-            >Edit</button>
+            >Edit</DefaultButton>
             
           </div>
         
@@ -217,10 +218,12 @@ export default class Form extends React.Component<IFormProps, IFormState>{
       else {
         
           actionDOM=<div>
-            <button onClick={(e) => {
+            <DefaultButton onClick={(e) => {
               this.props.addContact(this.state.inputContact);
               this.props.setFormType(FormTypes.None);
-            }}> Add</button>
+              this.props.setContactListVisibility(true);
+
+            }}> Add</DefaultButton>
             
           </div>
         
@@ -232,9 +235,11 @@ export default class Form extends React.Component<IFormProps, IFormState>{
     return(
       <div>
         {actionDOM}
-        <button onClick={(e) => {
+        <DefaultButton onClick={(e) => {
               this.props.setFormType(FormTypes.None);
-            }}> Cancel</button>
+              this.props.setContactListVisibility(true);
+
+            }}> Cancel</DefaultButton>
       </div>
     )
     
@@ -258,7 +263,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
         </div>
         
         <div>
-        <TextField inputClassName="required" name="num" value={this.state.inputContact.num} label="Number" errorMessage={this.getErrorDialog("num")} onChange={
+        <TextField inputClassName="required number" name="num" value={this.state.inputContact.num} label="Number" errorMessage={this.getErrorDialog("num")} onChange={
           (e) => {
             this.handleChange(e);
             this.handleValidation(e);
@@ -301,6 +306,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
             <ChoiceGroup
             name="gender"
             label="Gender"
+            selectedKey={this.state.inputContact.gender==undefined?"Male":this.state.inputContact.gender}
             options={[
               {key:'Male',text:"Male"},
               {key:'Female',text:"Female"}
@@ -313,7 +319,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
           </div>
 
 
-          <DatePicker value={this.state.inputContact.birthdate} onChange={(e)=>{
+          <DatePicker value={this.state.inputContact.birthdate} label="Date of Birth" onSelectDate={(e)=>{
             this.handleCalendar(e);
           }}></DatePicker>
 
@@ -332,11 +338,16 @@ export default class Form extends React.Component<IFormProps, IFormState>{
         } />
 
           Relation<div>
-              <Checkbox label="Friend" onChange={(e,isChecked)=>{
+              <Checkbox
+               label="Friend"
+               checked={this.isChecked("Friend")}
+               onChange={(e,isChecked)=>{
                 this.handleCheckBox(e,isChecked,"Friend");
               }}></Checkbox>
 
-               <Checkbox label="Colleague" onChange={(e,isChecked)=>{
+               <Checkbox label="Colleague"
+                checked={this.isChecked("Colleague")}
+                onChange={(e,isChecked)=>{
                 this.handleCheckBox(e,isChecked,"Colleague");
               }}></Checkbox>
           </div>  

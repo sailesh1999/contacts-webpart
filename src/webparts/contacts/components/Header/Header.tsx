@@ -9,6 +9,7 @@ interface IHeaderDetailProps {
   setFilter: ((filter: string) => void);
   setActiveContact: ((contact: Contact) => Contact);
   setFormType: ((formType: FormTypes) => void);
+  setContactListVisibility:any;
 }
 
 export default class Header extends React.Component<IHeaderDetailProps, {}>{
@@ -36,6 +37,7 @@ export default class Header extends React.Component<IHeaderDetailProps, {}>{
               <li className={styles["menu-item"]} onClick={(e) => {
                 this.props.setActiveContact(new Contact({}))
                 this.props.setFormType(FormTypes.Add);
+                this.props.setContactListVisibility(false);
               }} >+add </li>
 
               <li className={styles["menu-item"]}>

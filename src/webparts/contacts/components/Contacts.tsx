@@ -25,7 +25,8 @@ export default class Contacts extends React.Component<{}, IContactsState> {
       contactList: [],
       activeContact: new Contact({}),
       filter: Department.All,
-      formType: FormTypes.None
+      formType: FormTypes.None,
+      showContactList:true
     };
 
     this.setActiveContact = this.setActiveContact.bind(this);
@@ -36,6 +37,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     this.setFilter = this.setFilter.bind(this);
     this.setFormType = this.setFormType.bind(this);
     this.detailDOM = this.detailDOM.bind(this);
+    this.setContactListVisibility=this.setContactListVisibility.bind(this);
   }
 
   public componentDidMount() {
@@ -50,6 +52,10 @@ export default class Contacts extends React.Component<{}, IContactsState> {
         this.setState({ contactList: this.contactList })
       })
     console.log("Contacts loaded");
+  }
+
+  public setContactListVisibility(bool){
+    this.setState({showContactList:bool})
   }
 
   public setFilter(filter: Department) {
@@ -109,7 +115,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
   }
 
   public activeContactExist(): boolean {
-    if (this.state.activeContact.name != "") {
+    if (this.state.activeContact.name != undefined) {
       return true;
     }
     return false;
@@ -124,6 +130,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
 
             <PrimaryButton className={styles.edit} onClick={(e) => {
               this.setState({ formType: FormTypes.Edit })
+              this.setContactListVisibility(false)
             }}>EDIT</PrimaryButton>
 
             <DefaultButton onClick={(e) => {
@@ -149,9 +156,11 @@ export default class Contacts extends React.Component<{}, IContactsState> {
           setFilter={this.setFilter}
           setActiveContact={this.setActiveContact}
           setFormType={this.setFormType}
+          setContactListVisibility={this.setContactListVisibility}
         />
 
         <ContactsList
+          showContactList={this.state.showContactList}
           setActiveContact={this.setActiveContact}
           contactList={this.state.contactList}
           setFormType={this.setFormType}
@@ -166,6 +175,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
           activeContact={this.state.activeContact}
           formType={this.state.formType}
           setFormType={this.setFormType}
+          setContactListVisibility={this.setContactListVisibility}
         />
         <br />
       </div>

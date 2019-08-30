@@ -22,7 +22,18 @@ export default class Detail extends React.Component<IDetailProps, {}>
         return relations.join()
     }
 
+    public getDOBString(){
+        if(this.props.activeContact.birthdate==undefined)
+        {
+            return ""
+        }
+        let bdate=this.props.activeContact.birthdate;
+        return(bdate.getDate().toString()+"/"+(bdate.getMonth()+1).toString()+"/"+bdate.getFullYear().toString())
+    }
+
     public render(): React.ReactElement<{}> {
+        console.log(this.props.activeContact)
+
         return (
             <div>
                 <div>
@@ -30,7 +41,7 @@ export default class Detail extends React.Component<IDetailProps, {}>
                 <h1 className={styles["detail-value"]}>Number: {this.props.activeContact.num}</h1>
                 <h1 className={styles["detail-value"]}>Department: {this.props.activeContact.department}</h1>
                 <p>Gender:{this.props.activeContact.gender}</p>
-                <p>DOB:{this.props.activeContact.birthdate}</p>
+                <p>DOB:{this.getDOBString()}</p>
                 <pre>Address:{this.props.activeContact.address}</pre>
                 <p>Relation:{this.getRelationsString()}</p>
                 </div>

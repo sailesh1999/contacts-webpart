@@ -9,6 +9,7 @@ interface IContactsListProps {
     setActiveContact: ((contact: Contact) => Contact);
     setFormType: ((formType: FormTypes) => void);
     filter: Department;
+    showContactList:boolean;
 }
 
 export default class ContactsList extends React.Component<IContactsListProps, {}>{
@@ -34,7 +35,8 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
     }
 
     public generateContactsListDOM() {
-        this.filterList();
+        if(this.props.showContactList){
+            this.filterList();
         if (this.selectedList.length == 0) {
             return (<div>
                 <small>No contacts to display. Click +Add to add a contact</small>
@@ -58,6 +60,11 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
                 </ul>
             </div>)
         }
+        }
+        else{
+            return null;
+        }
+        
     }
 
     public render(): React.ReactElement<{}> {

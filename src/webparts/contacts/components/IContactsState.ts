@@ -7,4 +7,5 @@ export interface IContactsState  {
   activeContact:Contact;
   filter:Department;
   formType:FormTypes;
+  showContactList:boolean;
 }

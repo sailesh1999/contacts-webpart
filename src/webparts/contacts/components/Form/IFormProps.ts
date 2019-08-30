@@ -7,4 +7,6 @@ export interface IFormProps{
     editContact:((contact:Contact)=>void);
     formType:FormTypes;
     setFormType:((formType:FormTypes)=>void);
+    setContactListVisibility:any;
+
 }

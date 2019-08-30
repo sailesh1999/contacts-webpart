@@ -11,7 +11,7 @@ export default class ContactConverter
             num: contact.num,
             Address:contact.address,
             gender:contact.gender,
-            birthdate:null,
+            birthdate:contact.birthdate==undefined?null:new Date(contact.birthdate.getFullYear(),contact.birthdate.getMonth(),contact.birthdate.getDate()+1),
             photo:{
                 Description:'',
                 Url:contact.picture
@@ -44,9 +44,8 @@ export default class ContactConverter
         if (d == null)
           return d;
         var xDate = d.split("T")[0];
-        var year,month,day=xDate.split("-")
-        var date=new Date(year,month,day);
-        console.log(date);
+        xDate=xDate.split("-");
+        var date=new Date(parseInt(xDate[0]),parseInt(xDate[1])-1,parseInt(xDate[2]));
         return date;
       }
 }
