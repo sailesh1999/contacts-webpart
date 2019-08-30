@@ -10,6 +10,16 @@ export default class Detail extends React.Component<IDetailProps, {}>
 {
     public constructor(props: IDetailProps) {
         super(props);
+
+        this.getRelationsString=this.getRelationsString.bind(this);
+    }
+
+    public getRelationsString(){
+        let relations=this.props.activeContact.relation;
+        if(relations==undefined){
+            return ""
+        }
+        return relations.join()
     }
 
     public render(): React.ReactElement<{}> {
@@ -22,7 +32,7 @@ export default class Detail extends React.Component<IDetailProps, {}>
                 <p>Gender:{this.props.activeContact.gender}</p>
                 <p>DOB:{this.props.activeContact.birthdate}</p>
                 <pre>Address:{this.props.activeContact.address}</pre>
-                <p>Relation:{this.props.activeContact.relation.join()}</p>
+                <p>Relation:{this.getRelationsString()}</p>
                 </div>
 
                 <div>

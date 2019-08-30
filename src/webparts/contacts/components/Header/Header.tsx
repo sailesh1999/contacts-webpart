@@ -19,7 +19,7 @@ export default class Header extends React.Component<IHeaderDetailProps, {}>{
   }
 
   public changeFilter(e) {
-    this.props.setActiveContact(new Contact());
+    this.props.setActiveContact(new Contact({}));
     this.props.setFilter(e.target.value);
   }
 
@@ -34,7 +34,7 @@ export default class Header extends React.Component<IHeaderDetailProps, {}>{
           <nav className={styles["menu-nav"]}>
             <ul className={styles["menu-items"]}>
               <li className={styles["menu-item"]} onClick={(e) => {
-                this.props.setActiveContact(new Contact())
+                this.props.setActiveContact(new Contact({}))
                 this.props.setFormType(FormTypes.Add);
               }} >+add </li>
 

@@ -23,7 +23,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     this.service = new ContactService();
     this.state = {
       contactList: [],
-      activeContact: new Contact(),
+      activeContact: new Contact({}),
       filter: Department.All,
       formType: FormTypes.None
     };
@@ -42,10 +42,10 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     this.service.getContacts()
       .then((ListItems: any[]) => {
         ListItems.map((list) => {
-          console.log(list)
+          // console.log(list)
           let cont = this.converter.spContactToContact(list)
           this.contactList.push(cont);
-          console.log(cont)
+          // console.log(cont)
         })
         this.setState({ contactList: this.contactList })
       })
@@ -72,7 +72,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
   }
 
   public addContact(contact: Contact) {
-    this.setActiveContact(new Contact());
+    this.setActiveContact(new Contact({}));
     if (this.state.contactList.length != 0) {
       contact.id = this.state.contactList[this.state.contactList.length - 1].id + 1;
     }
@@ -98,7 +98,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
 
   public deleteContact(activeContactId: number) {
     this.setFormType(FormTypes.None);
-    this.setActiveContact(new Contact());
+    this.setActiveContact(new Contact({}));
     this.service.deleteContact(activeContactId)
       .then((e) => {
         let contactListCopy = this.state.contactList.slice();

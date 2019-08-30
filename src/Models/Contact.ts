@@ -1,16 +1,15 @@
 export class Contact {
-    id: number = -1;
-    name: string = "";
-    num: string = "";
-    department: string = "";
-    address:string="";
-    gender:string="Male";
-    birthdate:string=null;
-    picture:string=null;
-    userId:number=null;
-    relation=[];
-    constructor(args?) {
-        if (args != undefined) {
+    id: number ;
+    name: string ;
+    num: string ;
+    department: string ;
+    address:string;
+    gender:string;
+    birthdate:Date;
+    picture:string;
+    userId:number;
+    relation:String[];
+    constructor(args) {
             this.id = args.id;
             this.name = args.name;
             this.num = args.num;
@@ -21,6 +20,6 @@ export class Contact {
             this.picture=args.picture;
             this.userId=args.userId;
             this.relation=args.relation;
-        }
+        
     }
 }

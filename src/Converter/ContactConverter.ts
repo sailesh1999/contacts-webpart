@@ -11,7 +11,7 @@ export default class ContactConverter
             num: contact.num,
             Address:contact.address,
             gender:contact.gender,
-            birthdate:contact.birthdate,
+            birthdate:null,
             photo:{
                 Description:'',
                 Url:contact.picture
@@ -20,6 +20,7 @@ export default class ContactConverter
             // relation:{results:[
             //     true,false
             // ]}
+            relation: { "__metadata": { 'type': "Collection(Edm.String)" }, results: (contact.relation==undefined?[]:contact.relation) }
         })
     }
 
@@ -31,10 +32,10 @@ export default class ContactConverter
             department: SPListItem['department'], 
             address: SPListItem['Address'], 
             gender: SPListItem['gender'], 
-            birthdate: this.spDateToJSDate(SPListItem['birthdate']) ,
+            birthdate: this.spDateToJSDate(SPListItem['birthdate'] ),
             picture:SPListItem['photo']?SPListItem['photo'].Url:null,
             userId:SPListItem['personId'],
-            relation:SPListItem['relation'].slice()
+            relation:SPListItem['relation']
         })
         return(c)
     }
@@ -43,6 +44,9 @@ export default class ContactConverter
         if (d == null)
           return d;
         var xDate = d.split("T")[0];
-        return xDate;
+        var year,month,day=xDate.split("-")
+        var date=new Date(year,month,day);
+        console.log(date);
+        return date;
       }
 }
