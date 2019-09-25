@@ -6,14 +6,10 @@ import { Department } from "../../departments/departments";
 import { FormTypes } from "./FormTypes";
 
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
-import { Dropdown, DropdownMenuItemType, IDropdownOption } from 'office-ui-fabric-react/lib/Dropdown';
-import { ChoiceGroup, IChoiceGroupOption } from 'office-ui-fabric-react/lib/ChoiceGroup';
+import { Dropdown } from 'office-ui-fabric-react/lib/Dropdown';
+import { ChoiceGroup } from 'office-ui-fabric-react/lib/ChoiceGroup';
 import { Checkbox } from 'office-ui-fabric-react/lib/Checkbox';
-import { DatePicker, DayOfWeek, IDatePickerStrings, DefaultButton } from 'office-ui-fabric-react';
-
-
-
-
+import { DatePicker, DefaultButton } from 'office-ui-fabric-react';
 
 interface IFormState {
   inputContact: Contact;
@@ -21,38 +17,38 @@ interface IFormState {
 }
 
 export default class Form extends React.Component<IFormProps, IFormState>{
-  formType: FormTypes;
-  inputContact: Contact = new Contact({});
-  errorList={
+  public formType: FormTypes;
+  public inputContact: Contact = new Contact({});
+  public errorList={
     name:"Field shouldn't be empty",
     num:"Field shouldn't be empty. Accepted input is numbers only",
     department:"Department should be selected",
     address:"Address shouldn't be empty"
-  }
+  };
   public constructor(props: IFormProps) {
     super(props);
     this.state = { inputContact: this.props.activeContact ,errors:{}};
     this.formDOM = this.formDOM.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.sendData = this.sendData.bind(this);
+    this.processInputData = this.processInputData.bind(this);
     this.handleValidation=this.handleValidation.bind(this);
     this.isChecked=this.isChecked.bind(this);
   }
 
   public componentWillReceiveProps() {   
-    this.setState({ inputContact: this.props.activeContact })
+    this.setState({ inputContact: this.props.activeContact });
   }
 
   public componentDidUpdate(prevProps:IFormProps){
     if(this.props.formType!=prevProps.formType){
-      let errors
+      let errors;
       if(this.props.formType==FormTypes.Add){
         errors={
          name:true,
          num:true,
          department:true,
          address:true
-       }
+       };
      }
      else{
         errors={
@@ -60,20 +56,19 @@ export default class Form extends React.Component<IFormProps, IFormState>{
          num:false,
          department:false,
          address:false,
-       }
+       };
      }
-     this.setState({errors:errors})
+     this.setState({errors:errors});
     }
     if(this.props.activeContact!=prevProps.activeContact)
     {
-      this.setState({ inputContact: this.props.activeContact })
+      this.setState({ inputContact: this.props.activeContact });
     }
   }
 
   public handleChange(e) {
-    console.log(e.target.key)
     let fieldName;
-    let contact: Contact = new Contact(this.state.inputContact)
+    let contact: Contact = new Contact(this.state.inputContact);
     if(e.target.name!=undefined){
       fieldName=e.target.name;
     }
@@ -96,9 +91,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
   // }
 
   public handleChange2(e,item,name){
-    // let fieldName=e.target.title;
-    console.log(item,e.target.title);
-    let contact: Contact = new Contact(this.state.inputContact)
+    let contact: Contact = new Contact(this.state.inputContact);
     contact[name]=item.key;
     this.setState({inputContact:contact});
     let errors=this.state.errors;
@@ -108,31 +101,26 @@ export default class Form extends React.Component<IFormProps, IFormState>{
   }
 
   public handleCheckBox(e,isChecked,name){
-    
     let fieldName="relation";
     let fieldValue=name;
     let checked=e.target.checked;
-    let contact: Contact = new Contact(this.state.inputContact)
-
+    let contact: Contact = new Contact(this.state.inputContact);
     if(contact[fieldName]==undefined){
       contact[fieldName]=[];
     }
-
     if(isChecked){
-      contact[fieldName].push(fieldValue)
+      contact[fieldName].push(fieldValue);
     }
     else{
       contact[fieldName].splice(contact[fieldName].indexOf(fieldValue),1);
     }
-    // console.log(contact)
-    this.setState({ inputContact: contact })
+    this.setState({ inputContact: contact });
   }
 
   public handleCalendar(date){
-    let contact: Contact = new Contact(this.state.inputContact)
+    let contact: Contact = new Contact(this.state.inputContact);
     contact.birthdate=date;
     this.setState({inputContact:contact});
-
   }
 
   public isFormValid(errors){
@@ -149,16 +137,8 @@ export default class Form extends React.Component<IFormProps, IFormState>{
     let fieldName=e.target.name;
     let fieldValue=e.target.value;
     let classNames=e.target.className.split(" ");
-    //console.log(e.target.className)
     errors[fieldName]=false;
-    // console.log(typeof(fieldValue))
-    // console.log(fieldValue=="")
-     console.log(classNames);
-    // console.log(e.target.className)
-     console.log(classNames.indexOf("required"))
-
     if(classNames.indexOf("required")>-1){
-      console.log(fieldValue)
       if(fieldValue==""){
         errors[fieldName]=errors[fieldName]||true;
       }
@@ -175,10 +155,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
         errors[fieldName]=errors[fieldName]||false;
       }
     }  
-
-    this.setState({errors:errors})
-    console.log(errors)
-
+    this.setState({errors:errors});
   }
 
   public isChecked(checkBoxName:String){
@@ -189,31 +166,27 @@ export default class Form extends React.Component<IFormProps, IFormState>{
       return true;
     }
     return false;
-
   }
 
   public getErrorDialog(name){
     if(this.state.errors[name]){
-      return(this.errorList[name])
+      return(this.errorList[name]);
     }
     return "";
   }
 
-  public sendData() {
+  public processInputData() {
     let actionDOM;
     if(this.isFormValid(this.state.errors)){
-      if (this.props.formType == FormTypes.Edit) {
-        
+      if (this.props.formType == FormTypes.Edit) {      
           actionDOM=<div>
             <DefaultButton onClick={(e) => {
               this.props.setFormType(FormTypes.None);
               this.props.editContact(this.state.inputContact);
               this.props.setContactListVisibility(true);
             }}
-            >Edit</DefaultButton>
-            
-          </div>
-        
+            >Edit</DefaultButton>           
+          </div>;       
       }
       else {
         
@@ -222,15 +195,13 @@ export default class Form extends React.Component<IFormProps, IFormState>{
               this.props.addContact(this.state.inputContact);
               this.props.setFormType(FormTypes.None);
               this.props.setContactListVisibility(true);
-
-            }}> Add</DefaultButton>
-            
-          </div>
+            }}> Add</DefaultButton>            
+          </div>;
         
       }
     }
     else{
-      actionDOM=<div></div>
+      actionDOM=<div></div>;
     }
     return(
       <div>
@@ -241,7 +212,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
 
             }}> Cancel</DefaultButton>
       </div>
-    )
+    );
     
   }
 
@@ -283,13 +254,8 @@ export default class Form extends React.Component<IFormProps, IFormState>{
           ]}
           onChange={(e,item)=>{
             this.handleChange2(e,item,"department");
-          }}>
-            
+          }}>            
           </Dropdown>
-
-
-
-          
           </div>
 
           <div>
@@ -298,8 +264,7 @@ export default class Form extends React.Component<IFormProps, IFormState>{
             this.handleChange(e);
             this.handleValidation(e);
           }
-        } />
-           
+        } />          
           </div>
 
           <div>
@@ -312,24 +277,16 @@ export default class Form extends React.Component<IFormProps, IFormState>{
               {key:'Female',text:"Female"}
             ]}
             onChange={(e,option)=>{
-              this.handleChange2(e,option,"gender")
+              this.handleChange2(e,option,"gender");
             }}
             >
             </ChoiceGroup>
           </div>
 
-
           <DatePicker value={this.state.inputContact.birthdate} label="Date of Birth" onSelectDate={(e)=>{
             this.handleCalendar(e);
           }}></DatePicker>
 
-            
-
-          {/* DOB:<input type="date" name="birthdate" value={this.state.inputContact.birthdate} onChange={(e)=>{
-            this.handleChange(e);
-          }} >
-          </input>
-         */}
           <TextField name="picture" value={this.state.inputContact.picture} label="Picture" onChange={
           (e) => {
             this.handleChange(e);
@@ -350,14 +307,9 @@ export default class Form extends React.Component<IFormProps, IFormState>{
                 onChange={(e,isChecked)=>{
                 this.handleCheckBox(e,isChecked,"Colleague");
               }}></Checkbox>
-          </div>  
-
-
-
-          
-       
-        {this.sendData()}
-      </div>)
+          </div> 
+        {this.processInputData()}
+      </div>);
     }
   }
 

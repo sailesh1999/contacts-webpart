@@ -13,7 +13,7 @@ interface IContactsListProps {
 }
 
 export default class ContactsList extends React.Component<IContactsListProps, {}>{
-    selectedList: Contact[] = []
+    private selectedList: Contact[] = [];
 
     public constructor(props: IContactsListProps) {
         super(props);
@@ -24,13 +24,13 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
 
     public filterList() {
         if (this.props.filter == Department.All) {
-            this.selectedList = this.props.contactList
+            this.selectedList = this.props.contactList;
         }
         else {
             this.selectedList = this.props.contactList.filter(
                 (contact) => {
-                    return (contact.department == this.props.filter)
-                })
+                    return (contact.department == this.props.filter);
+                });
         }
     }
 
@@ -40,12 +40,12 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
         if (this.selectedList.length == 0) {
             return (<div>
                 <small>No contacts to display. Click +Add to add a contact</small>
-            </div>)
+            </div>);
         }
         else {
-            return (<div className={styles["contacts-container"]}>
-                <h3 className={styles["contacts-header"]}>CONTACTS</h3>
-                <ul className={styles["contacts-list"]}>
+            return (<div className={styles["contactsContainer"]}>
+                <h3 className={styles["contactsHeader"]}>CONTACTS</h3>
+                <ul className={styles["contactsList"]}>
 
                     {this.selectedList.map(
                         (contact, i) =>
@@ -54,17 +54,16 @@ export default class ContactsList extends React.Component<IContactsListProps, {}
                                 this.props.setActiveContact(contact);
                             }
                             }   >
-                                <h1 className={styles["list-contact-name"]}>{contact.name}</h1>
+                                <h1 className={styles["listContactName"]}>{contact.name}</h1>
                             </li>
                     )}
                 </ul>
-            </div>)
+            </div>);
         }
         }
         else{
             return null;
-        }
-        
+        }       
     }
 
     public render(): React.ReactElement<{}> {

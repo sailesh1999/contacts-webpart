@@ -10,30 +10,28 @@ export default class Detail extends React.Component<IDetailProps, {}>
 {
     public constructor(props: IDetailProps) {
         super(props);
-
         this.getRelationsString=this.getRelationsString.bind(this);
     }
 
     public getRelationsString(){
         let relations=this.props.activeContact.relation;
         if(relations==undefined){
-            return ""
+            return "";
         }
-        return relations.join()
+        return relations.join();
     }
 
     public getDOBString(){
         if(this.props.activeContact.birthdate==undefined)
         {
-            return ""
+            return "";
         }
         let bdate=this.props.activeContact.birthdate;
-        return(bdate.getDate().toString()+"/"+(bdate.getMonth()+1).toString()+"/"+bdate.getFullYear().toString())
+        return(bdate.getDate().toString()+"/"+(bdate.getMonth()+1).toString()+"/"+bdate.getFullYear().toString());
     }
 
     public render(): React.ReactElement<{}> {
-        console.log(this.props.activeContact)
-
+        console.log(this.props.activeContact);
         return (
             <div>
                 <div>
@@ -45,12 +43,10 @@ export default class Detail extends React.Component<IDetailProps, {}>
                 <pre>Address:{this.props.activeContact.address}</pre>
                 <p>Relation:{this.getRelationsString()}</p>
                 </div>
-
                 <div>
                     <img src={this.props.activeContact.picture} height="42" width="42" alt="No Profile photo"></img>
-                </div>
-                
+                </div>               
             </div>
-        )
+        );
     }
 }

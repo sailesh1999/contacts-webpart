@@ -17,11 +17,9 @@
     padding: 0;
     margin-top : 13px; 
     margin-bottom : 13px; 
-
   }
   
-  .menu .menu-nav .menu-items {
-    
+  .menu .menuNav .menuItems {
     font-weight:bold;
     list-style-type: none;
     margin: 0;
@@ -30,7 +28,7 @@
     background-color: #333333;
   }
   
-  .menu .menu-nav .menu-items .menu-item {
+  .menu .menuNav .menuItems .menuItem {
     font-family:"Segoe UI Black";
     font-size:23px;
     font-weight: 400;
@@ -43,7 +41,7 @@
     text-align: center;
     text-decoration: none;
   }
-  .menu-item{
+  .menuItem{
     select{
       color: white;
       background-color: #333333;
@@ -53,7 +51,7 @@
     }
   }
   
-  .menu .menu-nav .menu-items .menu-img-item {
+  .menu .menuNav .menuItems .menuImgItem {
     float:right;
    /* display: inline-block;*/
     margin-left: auto;
@@ -63,16 +61,16 @@
     
   }
   
-  .menu-item a{
+  .menuItem a{
     text-decoration: none;
     color: white;
   }
   
-  .contacts-container{
+  .contactsContainer{
     width: 100%;
     display: inline-block;
 }
-.contacts-list{
+.contactsList{
   padding-left: 40px;
   padding-right: 40px;
   li{
@@ -88,7 +86,7 @@
 } 
 
 
-.contacts-header{
+.contactsHeader{
     font-size: 20px;
     font-family: Arial;
     font-weight: 700;
@@ -96,21 +94,21 @@
 
 }
 
-.list-contact-name{
+.listContactName{
     font-weight: 100;
     font-size: 31px;
     margin-top: 18px;
     margin-bottom: 18px;
 }
 
-.list-contact-detail{
+.listContactDetail{
     font-size:17px;
     margin-top: 0px;
     margin-bottom: 3px;
 }
 
 
-.active-contact-details{
+.activeContactDetails{
   display: block;
   text-align: center;
  /* width: 100%;*/
@@ -120,13 +118,13 @@
   float: right;
   top:0;
 }
-.detail-name{
+.detailName{
   font-size:40px;
   font-weight: 400;
   margin-bottom: 5px;
 
 }
-.detail-value{
+.detailValue{
   font-size: 19px;
   margin-top: 0;
   margin-bottom: 0;
@@ -144,9 +142,8 @@
 .delete{
   font-size: 20px;
 }
-.edit-options{
+.editOptions{
   margin-top: 15px;
-
 }
 }
 

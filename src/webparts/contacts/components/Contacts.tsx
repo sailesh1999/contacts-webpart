@@ -3,7 +3,7 @@ import styles from './Contacts.module.scss';
 import { DefaultButton, PrimaryButton } from 'office-ui-fabric-react/lib/Button';
 
 import { IContactsState } from './IContactsState';
-import ContactService from '../../contacts/services/ContactService';
+import ContactService from '../../../services/ContactService';
 import Form from './Form/Form';
 import { FormTypes } from './Form/FormTypes';
 import Detail from './Detail/Detail';
@@ -12,15 +12,25 @@ import ContactsList from './ContactsList/ContactsList';
 import { Contact } from '../../../Models/Contact';
 import { Department } from '../departments/departments';
 import ContactConverter from '../../../Converter/ContactConverter';
+import { SPHttpClient} from "@microsoft/sp-http";
+import { SPWeb } from '@microsoft/sp-page-context';
 
-export default class Contacts extends React.Component<{}, IContactsState> {
+interface IContactsProps{
+  spHttpClient:SPHttpClient;
+  web:SPWeb;
+}
+
+export default class Contacts extends React.Component<IContactsProps, IContactsState> {
   private service: ContactService;
-  converter: ContactConverter = new ContactConverter();
-  contactList: Contact[] = [];
+  //private service2: ContactServiceSpHttpClient;
+  public converter: ContactConverter = new ContactConverter();
+  private contactList: Contact[] = [];
 
   public constructor(props) {
     super(props);
     this.service = new ContactService();
+    // this.service2 = new ContactServiceSpHttpClient(this.props.spHttpClient,this.props.web);
+    // this.service2.createContact();
     this.state = {
       contactList: [],
       activeContact: new Contact({}),
@@ -44,18 +54,16 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     this.service.getContacts()
       .then((ListItems: any[]) => {
         ListItems.map((list) => {
-          // console.log(list)
-          let cont = this.converter.spContactToContact(list)
+          let cont = this.converter.spContactToContact(list);
           this.contactList.push(cont);
-          // console.log(cont)
-        })
-        this.setState({ contactList: this.contactList })
-      })
+        });
+        this.setState({ contactList: this.contactList });
+      });
     console.log("Contacts loaded");
   }
 
-  public setContactListVisibility(bool){
-    this.setState({showContactList:bool})
+  public setContactListVisibility(bool:boolean){
+    this.setState({showContactList:bool});
   }
 
   public setFilter(filter: Department) {
@@ -74,7 +82,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
   public setFormType(formType: FormTypes) {
     this.setState({
       formType: formType
-    })
+    });
   }
 
   public addContact(contact: Contact) {
@@ -85,13 +93,12 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     else {
       contact.id = 0;
     }
-    console.log(contact)
     this.service.addContact(contact)
       .then((e) => {
         let contactListCopy = this.state.contactList.slice();
         contactListCopy.push(new Contact(contact));
-        this.setState({ contactList: contactListCopy })
-      })
+        this.setState({ contactList: contactListCopy });
+      });
   }
 
   public editContact(contact: Contact) {
@@ -99,7 +106,8 @@ export default class Contacts extends React.Component<{}, IContactsState> {
       .then((e) => {
         this.state.contactList[this.state.contactList.indexOf(this.state.activeContact)] = contact;
         this.setActiveContact(contact);
-      })
+      });
+
   }
 
   public deleteContact(activeContactId: number) {
@@ -108,10 +116,10 @@ export default class Contacts extends React.Component<{}, IContactsState> {
     this.service.deleteContact(activeContactId)
       .then((e) => {
         let contactListCopy = this.state.contactList.slice();
-        contactListCopy = contactListCopy.filter((contact) => { return contact.id != activeContactId })
+        contactListCopy = contactListCopy.filter((contact) => { return contact.id != activeContactId; });
         this.setState({ contactList: contactListCopy });
         console.log("Deleted contact and updated list");
-      })
+      });
   }
 
   public activeContactExist(): boolean {
@@ -129,8 +137,8 @@ export default class Contacts extends React.Component<{}, IContactsState> {
           <div className={styles["edit-options"]}>
 
             <PrimaryButton className={styles.edit} onClick={(e) => {
-              this.setState({ formType: FormTypes.Edit })
-              this.setContactListVisibility(false)
+              this.setState({ formType: FormTypes.Edit });
+              this.setContactListVisibility(false);
             }}>EDIT</PrimaryButton>
 
             <DefaultButton onClick={(e) => {
@@ -139,8 +147,7 @@ export default class Contacts extends React.Component<{}, IContactsState> {
             }   >Delete Contact</DefaultButton>
           </div>
         </div>
-      )
-
+      );
     }
     else {
       return null;
@@ -179,6 +186,6 @@ export default class Contacts extends React.Component<{}, IContactsState> {
         />
         <br />
       </div>
-    )
+    );
   }
 }

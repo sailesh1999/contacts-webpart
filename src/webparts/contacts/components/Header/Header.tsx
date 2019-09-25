@@ -9,11 +9,10 @@ interface IHeaderDetailProps {
   setFilter: ((filter: string) => void);
   setActiveContact: ((contact: Contact) => Contact);
   setFormType: ((formType: FormTypes) => void);
-  setContactListVisibility:any;
+  setContactListVisibility:((bool:boolean)=>void);
 }
 
 export default class Header extends React.Component<IHeaderDetailProps, {}>{
-  filteredList: Contact[] = [];
   public constructor(props: IHeaderDetailProps) {
     super(props);
     this.changeFilter = this.changeFilter.bind(this);
@@ -26,21 +25,21 @@ export default class Header extends React.Component<IHeaderDetailProps, {}>{
 
   public render(): React.ReactElement<{}> {
     return (
-      <div className={styles["header-container"]}>
+      <div className={styles["headerContainer"]}>
         <div className={styles.header}>
           <p className={styles.title}>Address Book</p>
         </div>
 
         <div className={styles.menu}>
-          <nav className={styles["menu-nav"]}>
-            <ul className={styles["menu-items"]}>
-              <li className={styles["menu-item"]} onClick={(e) => {
-                this.props.setActiveContact(new Contact({}))
+          <nav className={styles["menuNav"]}>
+            <ul className={styles["menuItems"]}>
+              <li className={styles["menuItem"]} onClick={(e) => {
+                this.props.setActiveContact(new Contact({}));
                 this.props.setFormType(FormTypes.Add);
                 this.props.setContactListVisibility(false);
               }} >+add </li>
 
-              <li className={styles["menu-item"]}>
+              <li className={styles["menuItem"]}>
                 <select
                   onChange={(e) => this.changeFilter(e)}
                 >
@@ -52,6 +51,6 @@ export default class Header extends React.Component<IHeaderDetailProps, {}>{
           </nav>
         </div>
       </div>
-    )
+    );
   }
 }

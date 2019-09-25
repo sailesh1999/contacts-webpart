@@ -1,14 +1,14 @@
 export class Contact {
-    id: number ;
-    name: string ;
-    num: string ;
-    department: string ;
-    address:string;
-    gender:string;
-    birthdate:Date;
-    picture:string;
-    userId:number;
-    relation:String[];
+    public id: number ;
+    public name: string ;
+    public num: string ;
+    public department: string ;
+    public address:string;
+    public gender:string;
+    public birthdate:Date;
+    public picture:string;
+    public userId:number;
+    public relation:String[];
     constructor(args) {
             this.id = args.id;
             this.name = args.name;

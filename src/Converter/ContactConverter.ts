@@ -21,7 +21,7 @@ export default class ContactConverter
             //     true,false
             // ]}
             relation: { "__metadata": { 'type': "Collection(Edm.String)" }, results: (contact.relation==undefined?[]:contact.relation) }
-        })
+        });
     }
 
     public spContactToContact(SPListItem){
@@ -36,8 +36,8 @@ export default class ContactConverter
             picture:SPListItem['photo']?SPListItem['photo'].Url:null,
             userId:SPListItem['personId'],
             relation:SPListItem['relation']
-        })
-        return(c)
+        });
+        return(c);
     }
 
     public spDateToJSDate(d) {
